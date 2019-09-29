@@ -1,12 +1,13 @@
 // @flow
 
-// noinspection JSUnusedGlobalSymbols
-export default class OOReduxUtils {
+import { AbstractAction } from './AbstractAction';
+
+export class OOReduxUtils {
   // noinspection JSUnusedGlobalSymbols
-  static mergeOwnAndForeignState<OwnState: Object, ForeignState: Object>(
-    ownState: OwnState,
-    foreignState: ForeignState
-  ): $Exact<{...OwnState, ...ForeignState}> {
+  static mergeOwnAndForeignState<OwnStateType: Object, ForeignStateType: Object>(
+    ownState: OwnStateType,
+    foreignState: ForeignStateType
+  ): $Exact<{ ...OwnStateType, ...ForeignStateType }> {
     const overlappingOwnAndForeignStateKeys = Object.keys(ownState).filter((ownStateKey: string) =>
       Object.keys(foreignState).includes(ownStateKey)
     );
@@ -18,6 +19,22 @@ export default class OOReduxUtils {
     return {
       ...ownState,
       ...foreignState
+    };
+  }
+
+  // noinspection JSUnusedGlobalSymbols
+  static createStateReducer<StateType>(
+    initialState: StateType,
+    actionBaseClass: Class<AbstractAction<StateType>>,
+    stateNamespace: string = ''
+  ): (StateType, { type: AbstractAction<StateType> }) => StateType {
+    return function(
+      currentState: StateType = initialState,
+      action: { type: AbstractAction<StateType> }
+    ): StateType {
+      return action.type instanceof actionBaseClass && action.type.getStateNamespace() === stateNamespace
+        ? action.type.performActionAndReturnNewState(currentState)
+        : currentState;
     };
   }
 }
