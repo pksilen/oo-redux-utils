@@ -39,6 +39,7 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jest": "^22.16.0",
     "flow-bin": "^0.105.2",
+    "flow-copy-source": "^2.0.8",
     "jest": "^24.9.0",
     "prettier": "^1.18.2"
   },
