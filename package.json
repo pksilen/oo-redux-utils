@@ -8,10 +8,9 @@
     "OO",
     "Utils"
   ],
-  "main": "lib/OOReduxUtils.js",
+  "main": "lib/index.js",
   "files": [
-    "lib",
-    "flow-typed"
+    "lib"
   ],
   "scripts": {
     "clean": "rimraf ./lib",
