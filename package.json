@@ -1,0 +1,51 @@
+{
+  "name": "oo-redux-utils",
+  "version": "1.0.1",
+  "description": "Utility functions for Object-oriented Redux",
+  "keywords": [
+    "Redux",
+    "Object-oriented",
+    "OO",
+    "Utils"
+  ],
+  "main": "lib/OOReduxUtils.js",
+  "files": [
+    "lib",
+    "flow-typed"
+  ],
+  "scripts": {
+    "build": "babel ./src --out-dir ./lib --source-maps && flow-copy-source ./src ./lib",
+    "test": "jest ./test --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pksilen/oo-redux-utils.git"
+  },
+  "author": "Petri Silen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pksilen/oo-redux-utils/issues"
+  },
+  "homepage": "https://github.com/pksilen/oo-redux-utils#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-flow": "^7.0.0",
+    "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.2.2",
+    "eslint-plugin-flowtype": "^4.2.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^22.16.0",
+    "flow-bin": "^0.105.2",
+    "jest": "^24.9.0",
+    "prettier": "^1.18.2"
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "printWidth": 110,
+    "tabWidth": 2,
+    "singleQuote": true
+  }
+}
