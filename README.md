@@ -45,9 +45,9 @@ initialPersonState.js
     export default initialPersonState;
 
 ModifyPersonAgeAction.js
-
-    // @flow
     
+    // @flow
+   
     import { AbstractAction } from 'oo-redux-utils';
     import type { PersonState } from './PersonState';
         
@@ -68,6 +68,8 @@ ModifyPersonAgeAction.js
     }
 
 ### Create state reducer
+    
+    // @flow
 
     import { createStore, combineReducers } from 'redux';
     import { OOReduxUtils } from 'oo-redux-utils';
@@ -83,6 +85,8 @@ ModifyPersonAgeAction.js
     );
     
 ### Create app state type
+    
+    // @flow
 
     import type { PersonState } from './PersonState'
     
@@ -93,6 +97,8 @@ ModifyPersonAgeAction.js
 ### Create DispatchWrapper type
 DispatchWrapper.js
     
+    // @flow
+    
     export type Dispatch = ({ type: AbstractAction<any> }) => void;
     
     export type DispatchWrapper = {
@@ -100,6 +106,9 @@ DispatchWrapper.js
     };
     
 ### User person state in React component
+    
+    // @flow
+    
     import React from 'react'
     import { connect } from 'react-redux';
     import OOReduxUtils from 'oo-redux-utils';
