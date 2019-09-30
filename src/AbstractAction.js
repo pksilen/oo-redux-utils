@@ -7,7 +7,7 @@ export class AbstractAction<T> {
     this.stateNamespace = stateNamespace;
   }
 
-  performActionAndReturnNewState(): T {
+  performActionAndReturnNewState(currentState: T): T {
     throw new TypeError('Abstract method called');
   }
 
