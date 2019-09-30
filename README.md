@@ -1,5 +1,5 @@
 # Object-oriented Redux Utils
-Object-oriented Redux Utils
+Get rid of switch-cases in your code by using object-oriented Redux Utils!
 
 [![version][version-badge]][package]
 [![build][build]][circleci]
