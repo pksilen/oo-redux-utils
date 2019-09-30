@@ -13,6 +13,119 @@ Object-oriented Redux Utils
 
 ## Installation
     npm install --save oo-redux-utils
+    
+## Usage
+    
+### Create Object-oriented action
+Create a new Object-oriented action by creating a class for action that extends AbstractAction&lt;StateType&gt;
+Then implement performActionAndReturnNewState method
+
+PersonState.js
+
+    // @flow
+    
+    export type PersonState = {
+        name: string,
+        age: number
+    };
+    
+initialPersonState.js
+    
+    // @flow
+    
+    const initialPersonState = {
+        name: '',
+        age: 0
+    }
+        
+    export default initialPersonState;
+
+ModifyPersonAgeAction.js
+
+    // @flow
+    
+    import { AbstractAction } from 'oo-redux-utils';
+    import type { PersonState } from './PersonState';
+        
+    export default class ModifyPersonAgeAction extends AbstractAction<PersonState> {
+      newAge: number;
+    
+      constructor(newAge: number) {
+        super();
+        this.newAge = newAge;
+      }
+    
+      performActionAndReturnNewState(currentState: PersonState): $Exact<PersonState> {
+        return {
+          ...currentState,
+          age: this.newAge
+        };
+      }
+    }
+
+### Create state reducer
+
+    import { createStore, combineReducers } from 'redux';
+    import { OOReduxUtils } from 'oo-redux-utils';
+    import initialPersonState from './initialPersonState';
+    
+    const appStateReducer = combineReducers({
+        personState: OOReduxUtils.createStateReducer(initialPersonState, AbstractAction<PersonState>);
+    });
+    
+    export default createStore(
+      appStateReducer,
+      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    );
+    
+### Create app state type
+
+    import type { PersonState } from './PersonState'
+    
+    export type AppState = {
+        personState: PersonState
+    };
+    
+### Create DispatchWrapper type
+DispatchWrapper.js
+    
+    export type Dispatch = ({ type: AbstractAction<any> }) => void;
+    
+    export type DispatchWrapper = {
+      dispatch: Dispatch
+    };
+    
+### User person state in React component
+    import React from 'react'
+    import { connect } from 'react-redux';
+    import OOReduxUtils from 'oo-redux-utils';
+    import type { DispatchWrapper } from './DispatchWrapper'
+    import ModifyPersonAgeAction from './ModifyPersonAgeAction';
+
+    type MappedState = PersonState;
+        
+    const mapAppStateToComponentProps = (appState: AppState): $Exact<MappedState>
+        => OOReduxUtils.mergeOwnAndForeignState(appState.personState, {});
+    
+    type Props = MappedState & DispatchWrapper;
+    
+    export default class PersonView extends React.Component<Props, {}> {
+        
+        modifyPersonAge = (newAge: number) => {
+            const { dispatch } = this.props;
+            dispatch({ type: new ModifyPersonAgeAction(newAge)});
+        };
+        
+        .
+        .
+        
+        render() {
+            .
+            .
+        }
+    }
+    
+    export default connect(mapAppStateToComponentProps)(PersonView);  
   
 ## License
 MIT License

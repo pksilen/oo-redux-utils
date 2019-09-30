@@ -1,13 +1,13 @@
 // @flow
 
-export class AbstractAction<T> {
+export class AbstractAction<StateType> {
   +stateNamespace: string;
 
   constructor(stateNamespace: string = '') {
     this.stateNamespace = stateNamespace;
   }
 
-  performActionAndReturnNewState(currentState: T): T {
+  performActionAndReturnNewState(currentState: StateType): $Exact<StateType> {
     throw new TypeError('Abstract method called');
   }
 
