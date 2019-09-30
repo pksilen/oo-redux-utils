@@ -7,7 +7,7 @@ export class AbstractAction<StateType> {
     this.stateNamespace = stateNamespace;
   }
 
-  performActionAndReturnNewState(currentState: StateType): $Exact<StateType> {
+  performActionAndReturnNewState(currentState: StateType): StateType {
     throw new TypeError('Abstract method called');
   }
 
