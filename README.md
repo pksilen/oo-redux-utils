@@ -111,7 +111,7 @@ DispatchWrapper.js
     
     type Props = MappedState & DispatchWrapper;
     
-    export default class PersonView extends React.Component<Props, {}> {
+    class PersonView extends React.Component<Props, {}> {
         
         modifyPersonAge = (newAge: number) => {
             const { dispatch } = this.props;
