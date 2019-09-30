@@ -24,16 +24,18 @@ PersonState.js
 
     // @flow
     
-    export type PersonState = {
+    export type PersonState = $Exact<{
         name: string,
         age: number
-    };
+    }>;
     
 initialPersonState.js
     
     // @flow
     
-    const initialPersonState = {
+    import type { PersonState } from './PersonState';
+    
+    const initialPersonState: PersonState = {
         name: '',
         age: 0
     }
@@ -55,7 +57,7 @@ ModifyPersonAgeAction.js
         this.newAge = newAge;
       }
     
-      performActionAndReturnNewState(currentState: PersonState): $Exact<PersonState> {
+      performActionAndReturnNewState(currentState: PersonState): PersonState {
         return {
           ...currentState,
           age: this.newAge
@@ -104,7 +106,7 @@ DispatchWrapper.js
 
     type MappedState = PersonState;
         
-    const mapAppStateToComponentProps = (appState: AppState): $Exact<MappedState>
+    const mapAppStateToComponentProps = (appState: AppState): MappedState
         => OOReduxUtils.mergeOwnAndForeignState(appState.personState, {});
     
     type Props = MappedState & DispatchWrapper;
@@ -121,6 +123,7 @@ DispatchWrapper.js
         
         render() {
             .
+            <.... onChange={this.modifyPersonAge} ... />
             .
         }
     }
