@@ -1,6 +1,8 @@
 # Object-oriented Redux Utils
 Get rid of switch-cases in your code by using object-oriented Redux Utils!
 
+Read article: Replace using conditionals with Polymorphism
+
 [![version][version-badge]][package]
 [![build][build]][circleci]
 [![coverage][coverage]][codecov]
@@ -141,3 +143,4 @@ MIT License
 [circleci]: https://circleci.com/gh/pksilen/oo-redux-utils/tree/master
 [coverage]: https://img.shields.io/codecov/c/github/pksilen/oo-redux-utils/master.svg?style=flat-square
 [codecov]: https://codecov.io/gh/pksilen/oo-redux-utils
+[Replace using conditionals with Polymorphism]: https://sourcemaking.com/refactoring/replace-conditional-with-polymorphism
