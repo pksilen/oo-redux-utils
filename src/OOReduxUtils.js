@@ -32,9 +32,9 @@ export default class OOReduxUtils {
     componentClass?: ComponentClass
   ): (StateType, ActionObject) => StateType {
     return function(currentState: StateType = initialState, action: ActionObject): StateType {
-      return action.type.getStateNamespace() === stateNamespace &&
-        ((action.receivingComponentClass && action.receivingComponentClass === componentClass) ||
-          (!action.receivingComponentClass && action.type instanceof actionBaseClass))
+      return ((action.receivingComponentClass && action.receivingComponentClass === componentClass) ||
+        (!action.receivingComponentClass && action.type instanceof actionBaseClass)) &&
+        action.type.getStateNamespace() === stateNamespace
         ? action.type.performActionAndReturnNewState(currentState)
         : currentState;
     };
