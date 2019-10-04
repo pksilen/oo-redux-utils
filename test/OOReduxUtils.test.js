@@ -2,6 +2,7 @@ import React from 'react';
 import OOReduxUtils from '../src/OOReduxUtils';
 import ModifyAgeAction from './ModifyAgeAction';
 import AbstractAction from '../src/AbstractAction';
+import AnotherAction from './AnotherAction';
 
 describe('mergeOwnAndForeignState', () => {
   it('should merge own and foreign state successfully', () => {
@@ -71,6 +72,16 @@ describe('createStateReducer', () => {
     expect(() => {
       reduceState(initialState, abstractAction);
     }).toThrow('Abstract method called');
+  });
+
+  test('calling created state reducer with different action base class should not alter state', () => {
+    const reduceState = OOReduxUtils.createStateReducer(initialState, ModifyAgeAction);
+    const modifyAgeAction = { type: new AnotherAction() };
+
+    const newState = reduceState(undefined, modifyAgeAction);
+
+    expect(newState.name).toBe('test');
+    expect(newState.age).toBe(25);
   });
 
   test('calling created state reducer with action from different namespace should not alter state', () => {
