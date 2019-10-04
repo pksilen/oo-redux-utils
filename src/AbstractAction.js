@@ -1,9 +1,9 @@
 // @flow
 
 export default class AbstractAction<StateType> {
-  +stateNamespace: string;
+  +stateNamespace: ?string;
 
-  constructor(stateNamespace: string) {
+  constructor(stateNamespace?: string) {
     this.stateNamespace = stateNamespace;
   }
 
@@ -11,7 +11,7 @@ export default class AbstractAction<StateType> {
     throw new TypeError('Abstract method called');
   }
 
-  getStateNamespace(): string {
+  getStateNamespace(): ?string {
     return this.stateNamespace;
   }
 }
