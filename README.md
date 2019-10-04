@@ -130,6 +130,10 @@ PersonView.js
     }
     
     export default connect(mapAppStateToComponentProps)(PersonView);  
+
+## Full example
+
+See [oo-redux-utils-flow-test-app]
   
 ## License
 MIT License
@@ -143,3 +147,4 @@ MIT License
 [coverage]: https://img.shields.io/codecov/c/github/pksilen/oo-redux-utils/master.svg?style=flat-square
 [codecov]: https://codecov.io/gh/pksilen/oo-redux-utils
 [Replace using conditionals with Polymorphism]: https://sourcemaking.com/refactoring/replace-conditional-with-polymorphism
+[oo-redux-utils-flow-test-app]: https://github.com/pksilen/oo-redux-utils-flow-test-app
