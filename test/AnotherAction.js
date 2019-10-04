@@ -2,9 +2,11 @@
 
 import AbstractAction from '../src/AbstractAction';
 
-export default class AnotherAction extends AbstractAction<{ name: string, age: number }> {
+type State = { name: string, age: number };
+
+export default class AnotherAction extends AbstractAction<State> {
   /* istanbul ignore next */
-  performActionAndReturnNewState(currentState: TestState): TestState {
+  performActionAndReturnNewState(currentState: State ): State {
     return {
       name: 'name',
       age: 10
