@@ -1,21 +1,21 @@
 // @flow
 
-import { AbstractAction } from '../src/AbstractAction';
+import AbstractAction from '../src/AbstractAction';
 
-type TestState = {
+type TestState = $Exact<{
   name: string,
   age: number
-};
+}>;
 
 export default class ModifyAgeAction extends AbstractAction<TestState> {
   age: number;
 
-  constructor(age: number, namespace: string = '') {
+  constructor(age: number, namespace: string) {
     super(namespace);
     this.age = age;
   }
 
-  performActionAndReturnNewState(currentState: TestState): $Exact<TestState> {
+  performActionAndReturnNewState(currentState: TestState): TestState {
     return {
       ...currentState,
       age: this.age

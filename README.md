@@ -27,8 +27,8 @@ PersonState.js
     // @flow
     
     export type PersonState = $Exact<{
-        name: string,
-        age: number
+        +name: string,
+        +age: number
     }>;
     
 initialPersonState.js
@@ -94,25 +94,15 @@ ModifyPersonAgeAction.js
         personState: PersonState
     };
     
-### Create DispatchWrapper type
-DispatchWrapper.js
-    
-    // @flow
-    
-    export type Dispatch = ({ type: AbstractAction<any> }) => void;
-    
-    export type DispatchWrapper = {
-      dispatch: Dispatch
-    };
-    
-### User person state in React component
-    
+### Use person state in React component
+PersonView.js
+
     // @flow
     
     import React from 'react'
     import { connect } from 'react-redux';
-    import OOReduxUtils from 'oo-redux-utils';
-    import type { DispatchWrapper } from './DispatchWrapper'
+    import { OOReduxUtils } from 'oo-redux-utils';
+    import type { DispatchWrapper } from 'oo-redux-utils'
     import ModifyPersonAgeAction from './ModifyPersonAgeAction';
 
     type MappedState = PersonState;

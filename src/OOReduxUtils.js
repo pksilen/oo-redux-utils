@@ -1,8 +1,10 @@
 // @flow
 
-import { AbstractAction } from './AbstractAction';
+import AbstractAction from './AbstractAction';
+import type { ActionObject } from './DispatchWrapper';
+import type { ComponentClass } from './ComponentClass';
 
-export class OOReduxUtils {
+export default class OOReduxUtils {
   // noinspection JSUnusedGlobalSymbols
   static mergeOwnAndForeignState<OwnStateType: Object, ForeignStateType: Object>(
     ownState: OwnStateType,
@@ -25,14 +27,14 @@ export class OOReduxUtils {
   // noinspection JSUnusedGlobalSymbols
   static createStateReducer<StateType>(
     initialState: StateType,
-    actionBaseClass: Class<AbstractAction<StateType>>,
-    stateNamespace: string = ''
-  ): (StateType, { type: AbstractAction<StateType> }) => StateType {
-    return function(
-      currentState: StateType = initialState,
-      action: { type: AbstractAction<StateType> }
-    ): StateType {
-      return action.type instanceof actionBaseClass && action.type.getStateNamespace() === stateNamespace
+    actionBaseClass: Class<AbstractAction<any>>,
+    stateNamespace?: string,
+    componentClass?: ComponentClass
+  ): (StateType, ActionObject) => StateType {
+    return function(currentState: StateType = initialState, action: ActionObject): StateType {
+      return action.type.getStateNamespace() === stateNamespace &&
+        ((action.receivingComponentClass && action.receivingComponentClass === componentClass) ||
+          (!action.receivingComponentClass && action.type instanceof actionBaseClass))
         ? action.type.performActionAndReturnNewState(currentState)
         : currentState;
     };

@@ -1,9 +1,9 @@
 // @flow
 
-export class AbstractAction<StateType> {
+export default class AbstractAction<StateType> {
   +stateNamespace: string;
 
-  constructor(stateNamespace: string = '') {
+  constructor(stateNamespace: string) {
     this.stateNamespace = stateNamespace;
   }
 
