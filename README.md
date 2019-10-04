@@ -9,6 +9,7 @@ Read article: [Replace using conditionals with Polymorphism]
 [![MIT License][license-badge]][license]
 
 ## Prerequisites
+    "react": "^16.0.0",
     "react-redux": "^6.0.0",
     "redux": "^4.0.1"
     "flow-bin": "^0.105.0"
