@@ -68,15 +68,28 @@ ModifyPersonAgeAction.js
       }
     }
 
-### Create state reducer
+### Create app state type
+AppState.js
     
     // @flow
 
+    import type { PersonState } from './PersonState'
+    
+    export type AppState = $Exact<{
+        personState: PersonState
+    }>;
+    
+### Create state store
+store.js
+
+    // @flow
+
     import { createStore, combineReducers } from 'redux';
-    import { OOReduxUtils } from 'oo-redux-utils';
+    import OOReduxUtils from 'oo-redux-utils';
+    import type { AppState } from AppState'
     import initialPersonState from './initialPersonState';
     
-    const appStateReducer = combineReducers({
+    const appStateReducer: $Shape<AppState> = combineReducers({
         personState: OOReduxUtils.createStateReducer(initialPersonState, AbstractAction<PersonState>);
     });
     
@@ -84,16 +97,6 @@ ModifyPersonAgeAction.js
       appStateReducer,
       window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
     );
-    
-### Create app state type
-    
-    // @flow
-
-    import type { PersonState } from './PersonState'
-    
-    export type AppState = {
-        personState: PersonState
-    };
     
 ### Use person state in React component
 PersonView.js
