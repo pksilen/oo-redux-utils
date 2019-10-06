@@ -89,7 +89,7 @@ store.js
     import type { AppState } from AppState'
     import initialPersonState from './initialPersonState';
     
-    const appStateReducer: $Shape<AppState> = combineReducers({
+    const appStateReducer: { [key: $Keys<AppState>]: any } = combineReducers({
         personState: OOReduxUtils.createStateReducer(initialPersonState, AbstractAction<PersonState>);
     });
     
