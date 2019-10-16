@@ -100,7 +100,7 @@ store.js
     ): Store<AppState, Action<AbstractAction<any>>);
     
 ### Use person state in React component
-PersonView.js
+PersonComponent.js
 
     // @flow
     
@@ -118,7 +118,7 @@ PersonView.js
     type OwnProps = {};
     type Props = $Exact<{ ...MappedState, ...DispatchWrapper };
     
-    class PersonView extends React.Component<Props, {}> {
+    class PersonComponent extends React.Component<Props, {}> {
         
         modifyPersonAge = (newAge: number) => {
             const { dispatch } = this.props;
@@ -135,7 +135,7 @@ PersonView.js
         }
     }
     
-    export default connect<Props, OwnProps, _, _, _, _>(mapAppStateToComponentProps)(PersonView);  
+    export default connect<Props, OwnProps, _, _, _, _>(mapAppStateToComponentProps)(PersonComponent);  
 
 ## Full example
 
