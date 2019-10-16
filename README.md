@@ -106,7 +106,7 @@ PersonComponent.js
     
     import React from 'react'
     import { connect } from 'react-redux';
-    import { OOReduxUtils } from 'oo-redux-utils';
+    import OOReduxUtils, { AbstractComponent } from 'oo-redux-utils';
     import type { DispatchWrapper } from 'oo-redux-utils'
     import ModifyPersonAgeAction from './ModifyPersonAgeAction';
 
@@ -118,11 +118,10 @@ PersonComponent.js
     type OwnProps = {};
     type Props = $Exact<{ ...MappedState, ...DispatchWrapper };
     
-    class PersonComponent extends React.Component<Props, {}> {
+    class PersonComponent extends AbstractComponent<Props, {}> {
         
         modifyPersonAge = (newAge: number) => {
-            const { dispatch } = this.props;
-            dispatch({ type: new ModifyPersonAgeAction(newAge)});
+            this.dispatch(new ModifyPersonAgeAction(newAge));
         };
         
         .
@@ -130,7 +129,7 @@ PersonComponent.js
         
         render() {
             .
-            <.... onChange={this.modifyPersonAge} ... />
+            <ComponentXYZ.... onChange={this.modifyPersonAge} ... />
             .
         }
     }

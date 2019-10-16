@@ -10,6 +10,10 @@ export type ActionObject = $Exact<{
 
 export type Dispatch = (ActionObject) => void;
 
-export type DispatchWrapper = {
+export type DispatchWrapper = $Exact<{
+  dispatch: Dispatch
+}>;
+
+export type InExactDispatchWrapper = {
   dispatch: Dispatch
 };
