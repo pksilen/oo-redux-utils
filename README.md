@@ -85,18 +85,19 @@ store.js
     // @flow
 
     import { createStore, combineReducers } from 'redux';
+    import type { Action, Store } from 'redux'
     import OOReduxUtils from 'oo-redux-utils';
     import type { AppState } from AppState'
     import initialPersonState from './initialPersonState';
     
-    const appStateReducer = combineReducers({
+    const appStateReducer: (AppState | void, Action<AbstractAction<any>>) => AppState = combineReducers({
         personState: OOReduxUtils.createStateReducer(initialPersonState, AbstractAction<PersonState>);
     });
     
-    export default createStore(
+    export default (createStore(
       appStateReducer,
       window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-    );
+    ): Store<AppState, Action<AbstractAction<any>>);
     
 ### Use person state in React component
 PersonView.js

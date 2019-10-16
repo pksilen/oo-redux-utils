@@ -30,7 +30,7 @@ export default class OOReduxUtils {
     actionBaseClass: Class<AbstractAction<any>>,
     stateNamespace?: string,
     componentType?: React.ComponentType<any>
-  ): (StateType, ActionObject) => StateType {
+  ): (StateType | void, ActionObject) => StateType {
     return function(currentState: StateType = initialState, action: ActionObject): StateType {
       return ((action.receivingComponentType && action.receivingComponentType === componentType) ||
         (!action.receivingComponentType && action.type instanceof actionBaseClass)) &&
