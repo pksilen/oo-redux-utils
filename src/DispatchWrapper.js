@@ -1,11 +1,11 @@
 // @flow
 
+import * as React from 'react';
 import AbstractAction from './AbstractAction';
-import type { ComponentClass } from './ComponentClass';
 
 export type ActionObject = $Exact<{
   type: AbstractAction<any>,
-  receivingComponentClass?: ComponentClass
+  receivingComponentType?: React.ComponentType<any>
 }>;
 
 export type Dispatch = (ActionObject) => void;

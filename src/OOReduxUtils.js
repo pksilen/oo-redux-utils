@@ -1,8 +1,8 @@
 // @flow
 
+import * as React from 'react';
 import AbstractAction from './AbstractAction';
 import type { ActionObject } from './DispatchWrapper';
-import type { ComponentClass } from './ComponentClass';
 
 export default class OOReduxUtils {
   // noinspection JSUnusedGlobalSymbols
@@ -29,11 +29,11 @@ export default class OOReduxUtils {
     initialState: StateType,
     actionBaseClass: Class<AbstractAction<any>>,
     stateNamespace?: string,
-    componentClass?: ComponentClass
+    componentType?: React.ComponentType<any>
   ): (StateType, ActionObject) => StateType {
     return function(currentState: StateType = initialState, action: ActionObject): StateType {
-      return ((action.receivingComponentClass && action.receivingComponentClass === componentClass) ||
-        (!action.receivingComponentClass && action.type instanceof actionBaseClass)) &&
+      return ((action.receivingComponentType && action.receivingComponentType === componentType) ||
+        (!action.receivingComponentType && action.type instanceof actionBaseClass)) &&
         action.type.getStateNamespace() === stateNamespace
         ? action.type.performActionAndReturnNewState(currentState)
         : currentState;

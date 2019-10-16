@@ -94,7 +94,7 @@ describe('createStateReducer', () => {
     expect(newState.age).toBe(25);
   });
 
-  test('calling state reducer created with component class with action that specifies same receivingComponentClass should alter state', () => {
+  test('calling state reducer created with component class with action that specifies same receivingComponentType should alter state', () => {
     const reduceState = OOReduxUtils.createStateReducer(
       initialState,
       ModifyAgeAction,
@@ -103,7 +103,7 @@ describe('createStateReducer', () => {
     );
     const modifyAgeAction = {
       type: new ModifyAgeAction(30),
-      receivingComponentClass: TestComponent
+      receivingComponentType: TestComponent
     };
 
     const newState = reduceState(initialState, modifyAgeAction);
@@ -112,7 +112,7 @@ describe('createStateReducer', () => {
     expect(newState.age).toBe(30);
   });
 
-  test('calling state reducer created with component class with action that specifies different receivingComponentClass should not alter state', () => {
+  test('calling state reducer created with component class with action that specifies different receivingComponentType should not alter state', () => {
     const reduceState = OOReduxUtils.createStateReducer(
       initialState,
       ModifyAgeAction,
@@ -122,7 +122,7 @@ describe('createStateReducer', () => {
 
     const modifyAgeAction = {
       type: new ModifyAgeAction(30),
-      receivingComponentClass: AnotherTestComponent
+      receivingComponentType: AnotherTestComponent
     };
 
     const newState = reduceState(initialState, modifyAgeAction);

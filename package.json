@@ -15,6 +15,7 @@
   "scripts": {
     "clean": "rimraf ./lib",
     "flow": "flow ./src",
+    "stop-flow": "flow stop",
     "build": "babel ./src --out-dir ./lib --source-maps && flow-copy-source ./src ./lib",
     "prebuild": "npm run clean && npm run flow && npm run test",
     "test": "jest ./test --coverage"
