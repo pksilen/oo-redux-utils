@@ -1,6 +1,6 @@
 {
   "name": "oo-redux-utils",
-  "version": "1.2.3",
+  "version": "1.3.0",
   "description": "Utility functions for Object-oriented Redux",
   "keywords": [
     "Redux",
