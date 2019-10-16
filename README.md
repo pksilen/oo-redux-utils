@@ -115,7 +115,8 @@ PersonView.js
     const mapAppStateToComponentProps = (appState: AppState): MappedState
         => OOReduxUtils.mergeOwnAndForeignState(appState.personState, {});
     
-    type Props = MappedState & DispatchWrapper;
+    type OwnProps = {};
+    type Props = $Exact<{ ...MappedState, ...DispatchWrapper };
     
     class PersonView extends React.Component<Props, {}> {
         
@@ -134,7 +135,7 @@ PersonView.js
         }
     }
     
-    export default connect(mapAppStateToComponentProps)(PersonView);  
+    export default connect<Props, OwnProps, _, _, _, _>(mapAppStateToComponentProps)(PersonView);  
 
 ## Full example
 
