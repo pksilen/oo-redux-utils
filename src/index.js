@@ -3,5 +3,6 @@
 export { default } from './OOReduxUtils';
 export { default as AbstractAction } from './AbstractAction';
 export { default as AbstractComponent } from './AbstractComponent';
-export { DispatchAction, DispatchActionToComponentType } from './DispatchUtils';
+export { default as DispatchUtils } from './DispatchUtils';
+export type { DispatchAction, DispatchActionToComponentType } from './DispatchUtils';
 export type { Dispatch, DispatchWrapper } from './DispatchWrapper';
