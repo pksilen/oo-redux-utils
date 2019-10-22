@@ -14,8 +14,14 @@ export default class AbstractComponent<PropsType: InExactDispatchWrapper, StateT
     dispatchAction(action);
   }
 
+  dispatchActions(actions: Array<AbstractAction<any>>) {
+    actions.forEach((action: AbstractAction<any>) => this.dispatchAction(action));
+  }
+
   dispatchActionToComponentType(action: AbstractAction<any>, componentType: React.ComponentType<any>) {
-   const dispatchActionToComponentType = DispatchUtils.createActionDispatcherToComponentType(this.props.dispatch);
+    const dispatchActionToComponentType = DispatchUtils.createActionDispatcherToComponentType(
+      this.props.dispatch
+    );
     dispatchActionToComponentType(action, componentType);
   }
 }
