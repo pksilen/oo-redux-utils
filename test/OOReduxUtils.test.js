@@ -55,7 +55,7 @@ describe('createStateReducer', () => {
     expect(newState.age).toBe(30);
   });
 
-  test('calling create state reducer without current state should use initial state', () => {
+  test('that calling create state reducer without current state should use initial state', () => {
     const reduceState = OOReduxUtils.createStateReducer(initialState, ModifyAgeAction);
     const modifyAgeAction = { type: new ModifyAgeAction(30) };
 
@@ -65,7 +65,7 @@ describe('createStateReducer', () => {
     expect(newState.age).toBe(30);
   });
 
-  test('calling created state reducer should throw error if abstract action method is not overridden', () => {
+  test('that calling created state reducer should throw error if abstract action method is not overridden', () => {
     const reduceState = OOReduxUtils.createStateReducer(initialState, AbstractAction);
     const abstractAction = { type: new AbstractAction() };
 
@@ -74,7 +74,7 @@ describe('createStateReducer', () => {
     }).toThrow('Abstract method called');
   });
 
-  test('calling created state reducer with different action base class should not alter state', () => {
+  test('that calling created state reducer with different action base class should not alter state', () => {
     const reduceState = OOReduxUtils.createStateReducer(initialState, ModifyAgeAction);
     const modifyAgeAction = { type: new AnotherAction() };
 
@@ -84,8 +84,12 @@ describe('createStateReducer', () => {
     expect(newState.age).toBe(25);
   });
 
-  test('calling created state reducer with action from different namespace should not alter state', () => {
-    const reduceState = OOReduxUtils.createStateReducer(initialState, ModifyAgeAction, 'testNamespace');
+  test('that calling created state reducer with action from different namespace should not alter state', () => {
+    const reduceState = OOReduxUtils.createNamespacedStateReducer(
+      initialState,
+      ModifyAgeAction,
+      'testNamespace'
+    );
     const modifyAgeAction = { type: new ModifyAgeAction(30, 'anotherNamespace') };
 
     const newState = reduceState(undefined, modifyAgeAction);
@@ -94,11 +98,10 @@ describe('createStateReducer', () => {
     expect(newState.age).toBe(25);
   });
 
-  test('calling state reducer created with component class with action that specifies same receivingComponentType should alter state', () => {
-    const reduceState = OOReduxUtils.createStateReducer(
+  test('that calling component typed state reducer with an action that specifies the same component type, should alter state', () => {
+    const reduceState = OOReduxUtils.createStateReducerWithComponentType(
       initialState,
       ModifyAgeAction,
-      undefined,
       TestComponent
     );
     const modifyAgeAction = {
@@ -112,11 +115,10 @@ describe('createStateReducer', () => {
     expect(newState.age).toBe(30);
   });
 
-  test('calling state reducer created with component class with action that specifies different receivingComponentType should not alter state', () => {
-    const reduceState = OOReduxUtils.createStateReducer(
+  test('that calling component typed state reducer with an action that specifies different component type, should not alter state', () => {
+    const reduceState = OOReduxUtils.createStateReducerWithComponentType(
       initialState,
       ModifyAgeAction,
-      undefined,
       TestComponent
     );
 
@@ -129,5 +131,24 @@ describe('createStateReducer', () => {
 
     expect(newState.name).toBe('test');
     expect(newState.age).toBe(25);
+  });
+
+  test('that calling namespaced and component typed state reducer with an action that specifies the same namespace and component type, should alter state', () => {
+    const reduceState = OOReduxUtils.createNamespacedStateReducerWithComponentType(
+      initialState,
+      ModifyAgeAction,
+      'testNamespace',
+      TestComponent
+    );
+
+    const modifyAgeAction = {
+      type: new ModifyAgeAction(30, 'testNamespace'),
+      receivingComponentType: TestComponent
+    };
+
+    const newState = reduceState(initialState, modifyAgeAction);
+
+    expect(newState.name).toBe('test');
+    expect(newState.age).toBe(30);
   });
 });

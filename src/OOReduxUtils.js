@@ -4,6 +4,21 @@ import * as React from 'react';
 import AbstractAction from './AbstractAction';
 import type { ActionObject } from './DispatchWrapper';
 
+function createStateReducer<StateType>(
+  initialState: StateType,
+  actionBaseClass: Class<AbstractAction<any>>,
+  stateNamespace?: string,
+  componentType?: React.ComponentType<any>
+): (StateType | void, ActionObject) => StateType {
+  return function(currentState: StateType = initialState, action: ActionObject): StateType {
+    return ((action.receivingComponentType && action.receivingComponentType === componentType) ||
+      (!action.receivingComponentType && action.type instanceof actionBaseClass)) &&
+      action.type.getStateNamespace() === stateNamespace
+      ? action.type.performActionAndReturnNewState(currentState)
+      : currentState;
+  };
+}
+
 export default class OOReduxUtils {
   // noinspection JSUnusedGlobalSymbols
   static mergeOwnAndForeignState<OwnStateType: Object, ForeignStateType: Object>(
@@ -27,16 +42,36 @@ export default class OOReduxUtils {
   // noinspection JSUnusedGlobalSymbols
   static createStateReducer<StateType>(
     initialState: StateType,
-    actionBaseClass: Class<AbstractAction<any>>,
-    stateNamespace?: string,
-    componentType?: React.ComponentType<any>
+    actionBaseClass: Class<AbstractAction<any>>
   ): (StateType | void, ActionObject) => StateType {
-    return function(currentState: StateType = initialState, action: ActionObject): StateType {
-      return ((action.receivingComponentType && action.receivingComponentType === componentType) ||
-        (!action.receivingComponentType && action.type instanceof actionBaseClass)) &&
-        action.type.getStateNamespace() === stateNamespace
-        ? action.type.performActionAndReturnNewState(currentState)
-        : currentState;
-    };
+    return createStateReducer(initialState, actionBaseClass);
+  }
+
+  // noinspection JSUnusedGlobalSymbols
+  static createNamespacedStateReducer<StateType>(
+    initialState: StateType,
+    actionBaseClass: Class<AbstractAction<any>>,
+    stateNamespace: string
+  ): (StateType | void, ActionObject) => StateType {
+    return createStateReducer(initialState, actionBaseClass, stateNamespace);
+  }
+
+  // noinspection JSUnusedGlobalSymbols
+  static createStateReducerWithComponentType<StateType>(
+    initialState: StateType,
+    actionBaseClass: Class<AbstractAction<any>>,
+    componentType: React.ComponentType<any>
+  ): (StateType | void, ActionObject) => StateType {
+    return createStateReducer(initialState, actionBaseClass, undefined, componentType);
+  }
+
+  // noinspection JSUnusedGlobalSymbols
+  static createNamespacedStateReducerWithComponentType<StateType>(
+    initialState: StateType,
+    actionBaseClass: Class<AbstractAction<any>>,
+    stateNamespace: string,
+    componentType: React.ComponentType<any>
+  ): (StateType | void, ActionObject) => StateType {
+    return createStateReducer(initialState, actionBaseClass, stateNamespace, componentType);
   }
 }
