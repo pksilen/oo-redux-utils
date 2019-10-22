@@ -8,12 +8,14 @@ export type ActionObject = $Exact<{
   receivingComponentType?: React.ComponentType<any>
 }>;
 
-export type Dispatch = (ActionObject) => void;
+type Dispatch = (ActionObject) => void;
+
+export type InExactDispatchWrapper = {
+  dispatch: Dispatch
+};
 
 export type DispatchWrapper = $Exact<{
   dispatch: Dispatch
 }>;
 
-export type InExactDispatchWrapper = {
-  dispatch: Dispatch
-};
+

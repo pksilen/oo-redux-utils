@@ -1,10 +1,15 @@
 // @flow
 
+import type { DispatchAction } from './DispatchUtils';
+
 export default class AbstractAction<StateType> {
   +stateNamespace: ?string;
 
-  constructor(stateNamespace?: string) {
+  +dispatchAction: ?DispatchAction;
+
+  constructor(stateNamespace?: string, dispatchAction?: DispatchAction) {
     this.stateNamespace = stateNamespace;
+    this.dispatchAction = dispatchAction;
   }
 
   performActionAndReturnNewState(currentState: StateType): StateType {
