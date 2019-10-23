@@ -32,18 +32,19 @@ PersonState.js
         +age: number
     }>;
     
-initialPersonState.js
+personStateReducer.js
     
     // @flow
     
+    import OOReduxUtils from 'oo-redux-utils';
     import type { PersonState } from './PersonState';
     
     const initialPersonState: PersonState = {
         name: '',
         age: 0
     }
-        
-    export default initialPersonState;
+    
+    export default OOReduxUtils.createStateReducer(initialPersonState, AbstractAction<PersonState>)
 
 ModifyPersonAgeAction.js
     
@@ -73,7 +74,7 @@ AppState.js
     
     // @flow
 
-    import type { PersonState } from './PersonState'
+    import type { PersonState } from './PersonState';
     
     export type AppState = $Exact<{
         personState: PersonState
@@ -85,13 +86,11 @@ store.js
     // @flow
 
     import { createStore, combineReducers } from 'redux';
-    import type { Action, Store } from 'redux'
-    import OOReduxUtils from 'oo-redux-utils';
-    import type { AppState } from AppState'
-    import initialPersonState from './initialPersonState';
+    import type { Action, Store } from 'redux';
+    import type { AppState } from AppState';
     
     const appStateReducer: (AppState | void, Action<AbstractAction<any>>) => AppState = combineReducers({
-        personState: OOReduxUtils.createStateReducer(initialPersonState, AbstractAction<PersonState>);
+        personState: personStateReducer;
     });
     
     export default (createStore(
@@ -104,10 +103,10 @@ PersonComponent.js
 
     // @flow
     
-    import React from 'react'
+    import React from 'react';
     import { connect } from 'react-redux';
     import OOReduxUtils, { AbstractComponent } from 'oo-redux-utils';
-    import type { DispatchWrapper } from 'oo-redux-utils'
+    import type { DispatchWrapper } from 'oo-redux-utils';
     import ModifyPersonAgeAction from './ModifyPersonAgeAction';
 
     type MappedState = PersonState;
@@ -121,7 +120,7 @@ PersonComponent.js
     class PersonComponent extends AbstractComponent<Props, {}> {
         
         modifyPersonAge = (newAge: number) => {
-            this.dispatch(new ModifyPersonAgeAction(newAge));
+            this.dispatchAction(new ModifyPersonAgeAction(newAge));
         };
         
         .
