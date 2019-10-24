@@ -7,7 +7,7 @@ import type { ActionObject } from './DispatchWrapper';
 function createStateReducer<StateType>(
   initialState: StateType,
   actionBaseClass: Class<AbstractAction<any>>,
-  stateNamespace?: string,
+  stateNamespace: string,
   componentType?: React.ComponentType<any>
 ): (StateType | void, ActionObject) => StateType {
   return function(currentState: StateType = initialState, action: ActionObject): StateType {
@@ -44,7 +44,7 @@ export default class OOReduxUtils {
     initialState: StateType,
     actionBaseClass: Class<AbstractAction<any>>
   ): (StateType | void, ActionObject) => StateType {
-    return createStateReducer(initialState, actionBaseClass);
+    return createStateReducer(initialState, actionBaseClass, '');
   }
 
   // noinspection JSUnusedGlobalSymbols
@@ -62,7 +62,7 @@ export default class OOReduxUtils {
     actionBaseClass: Class<AbstractAction<any>>,
     componentType: React.ComponentType<any>
   ): (StateType | void, ActionObject) => StateType {
-    return createStateReducer(initialState, actionBaseClass, undefined, componentType);
+    return createStateReducer(initialState, actionBaseClass, '', componentType);
   }
 
   // noinspection JSUnusedGlobalSymbols

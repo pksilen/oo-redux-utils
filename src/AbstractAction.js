@@ -3,11 +3,11 @@
 import type { DispatchAction } from './DispatchUtils';
 
 export default class AbstractAction<StateType> {
-  +stateNamespace: ?string;
+  +stateNamespace: string;
 
   +dispatchAction_: ?DispatchAction;
 
-  constructor(stateNamespace?: string, dispatchAction?: DispatchAction) {
+  constructor(stateNamespace: string, dispatchAction?: DispatchAction) {
     this.stateNamespace = stateNamespace;
     this.dispatchAction_ = dispatchAction;
   }

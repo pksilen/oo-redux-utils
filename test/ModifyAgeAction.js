@@ -10,7 +10,7 @@ type TestState = $Exact<{
 export default class ModifyAgeAction extends AbstractAction<TestState> {
   age: number;
 
-  constructor(age: number, namespace: string) {
+  constructor(age: number, namespace: string = '') {
     super(namespace);
     this.age = age;
   }
