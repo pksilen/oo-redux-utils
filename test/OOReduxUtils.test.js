@@ -67,7 +67,7 @@ describe('createStateReducer', () => {
 
   test('that calling created state reducer should throw error if abstract action method is not overridden', () => {
     const reduceState = OOReduxUtils.createStateReducer(initialState, AbstractAction);
-    const abstractAction = { type: new AbstractAction('') };
+    const abstractAction = { type: new AbstractAction() };
 
     expect(() => {
       reduceState(initialState, abstractAction);

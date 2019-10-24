@@ -7,7 +7,7 @@ export default class AbstractAction<StateType> {
 
   +dispatchAction_: ?DispatchAction;
 
-  constructor(stateNamespace: string, dispatchAction?: DispatchAction) {
+  constructor(stateNamespace?: string = '', dispatchAction?: DispatchAction) { // NOSONAR
     this.stateNamespace = stateNamespace;
     this.dispatchAction_ = dispatchAction;
   }
