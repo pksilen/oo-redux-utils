@@ -10,6 +10,10 @@ function createStateReducer<StateType>(
   stateNamespace: string,
   componentType?: React.ComponentType<any>
 ): (StateType | void, ActionObject) => StateType {
+  if (actionBaseClass === AbstractAction) {
+    throw new Error('actionBaseClass must be a class extended from AbstractAction');
+  }
+
   return function(currentState: StateType = initialState, action: ActionObject): StateType {
     return ((action.receivingComponentType && action.receivingComponentType === componentType) ||
       (!action.receivingComponentType && action.type instanceof actionBaseClass)) &&
