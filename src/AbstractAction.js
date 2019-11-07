@@ -39,7 +39,7 @@ export default class AbstractAction<StateType> {
   dispatchActionWithDi(
     diContainer: { create: (...args: Array<any>) => any },
     actionClass: Class<AbstractAction<any>>,
-    params: Object
+    params: ?Object
   ) {
     diContainer.create(actionClass, params).then((action: any) => this.dispatchAction(action));
   }
@@ -50,10 +50,21 @@ export default class AbstractAction<StateType> {
 
   dispatchActionsWithDi(
     diContainer: { create: (...args: Array<any>) => any },
-    actionDefs: Array<[Class<AbstractAction<any>>, Object]>
+    actionDefs: Array<[Class<AbstractAction<any>>, Object] | Class<AbstractAction<any>> | AbstractAction<any>>
   ) {
-    actionDefs.forEach(([actionClass, params]: [Class<AbstractAction<any>>, Object]) =>
-      this.dispatchActionWithDi(diContainer, actionClass, params)
+    actionDefs.forEach(
+      (
+        actionDef: [Class<AbstractAction<any>>, Object] | Class<AbstractAction<any>> | AbstractAction<any>
+      ) => {
+        if (Array.isArray(actionDef)) {
+          const [actionClass, params] = actionDef;
+          this.dispatchActionWithDi(diContainer, actionClass, params);
+        } else if (typeof actionDef === 'function') {
+          this.dispatchActionWithDi(diContainer, actionDef[0]);
+        } else {
+          this.dispatchAction(actionDef);
+        }
+      }
     );
   }
 

@@ -134,7 +134,7 @@ describe('AbstractAction', () => {
   });
 
   describe('dispatchActionsWithDi', () => {
-    it('should create actions with dependnecies injected and dispatch actions', () => {
+    it('should create actions with dependencies injected and dispatch actions', () => {
       // GIVEN
       const dispatchAction = jest.fn();
       const createMock = jest.fn();
@@ -143,6 +143,7 @@ describe('AbstractAction', () => {
       };
       const action = new ModifyAgeAction(30);
       const action2 =  new ModifyAgeAction(30);
+      const action3 = new ModifyAgeAction(30);
       const promise = Promise.resolve(action);
       const promise2 = Promise.resolve(action2);
       createMock.mockReturnValueOnce(promise);
@@ -152,12 +153,15 @@ describe('AbstractAction', () => {
       // WHEN
       dispatchingAction.dispatchActionsWithDi(diContainer, [
         [AsyncModifyAgeAction, { age: 30 }],
-        [AsyncModifyAgeAction, { age: 30 }]
+        AsyncModifyAgeAction,
+        action3
       ]);
 
       // THEN
       return Promise.all([promise, promise2]).then(() => {
         expect(dispatchAction).toHaveBeenCalledWith(action);
+        expect(dispatchAction).toHaveBeenCalledWith(action2);
+        expect(dispatchAction).toHaveBeenCalledWith(action3);
       });
     });
   });
