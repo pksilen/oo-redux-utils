@@ -2,30 +2,30 @@
 /* istanbul ignore file */
 
 import AbstractAction from '../src/AbstractAction';
+import type { DispatchAction } from '../src';
 
 type TestState = $Exact<{
   name: string,
   age: number
 }>;
 
-class ModifyAgeActionBase extends AbstractAction<TestState> {
+class DispatchingActionBase extends AbstractAction<TestState> {
   getBaseActionClass(): Class<AbstractAction<any>> {
-    return ModifyAgeActionBase;
+    return DispatchingActionBase;
   }
 }
 
-export default class ModifyAgeAction extends ModifyAgeActionBase {
+export default class DispatchingAction extends DispatchingActionBase {
   age: number;
 
-  constructor(age: number, namespace: string = '') {
-    super(namespace);
-    this.age = age;
+  constructor(dispatchAction: DispatchAction) {
+    super('', dispatchAction);
   }
 
   performActionAndReturnNewState(currentState: TestState): TestState {
     return {
       ...currentState,
-      age: this.age
+      age: 30
     };
   }
 }

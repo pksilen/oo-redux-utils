@@ -8,17 +8,11 @@ type TestState = $Exact<{
   age: number
 }>;
 
-class ModifyAgeActionBase extends AbstractAction<TestState> {
-  getBaseActionClass(): Class<AbstractAction<any>> {
-    return ModifyAgeActionBase;
-  }
-}
-
-export default class ModifyAgeAction extends ModifyAgeActionBase {
+export default class NamespacedModifyAgeAction extends AbstractAction<TestState> {
   age: number;
 
-  constructor(age: number, namespace: string = '') {
-    super(namespace);
+  constructor(stateNamespace: string, age: number) {
+    super(stateNamespace);
     this.age = age;
   }
 

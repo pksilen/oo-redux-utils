@@ -1,4 +1,5 @@
 // @flow
+/* istanbul ignore file */
 
 import AbstractAction from '../src/AbstractAction';
 
