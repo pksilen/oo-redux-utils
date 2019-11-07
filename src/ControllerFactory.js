@@ -25,6 +25,14 @@ export default class ControllerFactory {
     this.stateNamespace = stateNamespace;
   }
 
+  dispatchActionWithDi(actionClass: Class<AbstractAction<any>>, params: ?Object) {
+    if (this.diContainer) {
+      this.diContainer.create(actionClass, params).then((action: any) => this.dispatchAction(action));
+    } else {
+      throw new Error('diContainer argument is missing');
+    }
+  }
+
   createController() {
     const dispatchFnNameToDispatchFnMap = Object.entries(this.getDispatchFnNameToActionClassMap()).reduce(
       (
