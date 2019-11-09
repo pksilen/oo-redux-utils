@@ -25,9 +25,11 @@ export default class AbstractControllerFactory {
     this.stateNamespace = stateNamespace;
   }
 
-  dispatchActionWithDi(actionClass: Class<AbstractAction<any>>, params: ?Object) {
+  dispatchActionWithDi(actionClass: Class<AbstractAction<any>>, ...args: Array<any>) {
     if (this.diContainer) {
-      this.diContainer.create(actionClass, params).then((action: any) => this.dispatchAction(action));
+      this.diContainer
+        .create(actionClass, { stateNamespace: this.stateNamespace }, ...args)
+        .then((action: any) => this.dispatchAction(action));
     } else {
       throw new Error('diContainer argument is missing');
     }
@@ -46,7 +48,7 @@ export default class AbstractControllerFactory {
             accumulatedValue[dispatchFnName] = (...args: Array<any>) =>
               // $FlowFixMe
               this.diContainer
-                .create(ActionClass, { ...args[0], stateNamespace: this.stateNamespace })
+                .create(ActionClass, { stateNamespace: this.stateNamespace }, ...args)
                 .then((action: any) => this.dispatchAction(action));
           } else {
             throw new Error('diContainer argument is missing');

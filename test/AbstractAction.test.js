@@ -106,7 +106,7 @@ describe('AbstractAction', () => {
       const dispatchingAction = new DispatchingAction(dispatchAction);
 
       // WHEN
-      dispatchingAction.dispatchActionWithDi(diContainer, AsyncModifyAgeAction, { age: 30 });
+      dispatchingAction.dispatchActionWithDi(diContainer, AsyncModifyAgeAction,  30);
 
       // THEN
       return promise.then(() => {
@@ -122,14 +122,16 @@ describe('AbstractAction', () => {
       const dispatchingAction = new DispatchingAction(dispatchAction);
       const toDispatchAction1 = new ModifyAgeAction(30);
       const toDispatchAction2 = new ModifyAgeAction(35);
+      const toDispatchActionClass = ModifyAgeAction;
 
       // WHEN
-      dispatchingAction.dispatchActions([toDispatchAction1, toDispatchAction2]);
+      dispatchingAction.dispatchActions([toDispatchAction1, toDispatchAction2, toDispatchActionClass]);
 
       // THEN
-      expect(dispatchAction).toHaveBeenCalledTimes(2);
+      expect(dispatchAction).toHaveBeenCalledTimes(3);
       expect(dispatchAction).toHaveBeenNthCalledWith(1, toDispatchAction1);
       expect(dispatchAction).toHaveBeenNthCalledWith(2, toDispatchAction2);
+      expect(dispatchAction).toHaveBeenNthCalledWith(3, new toDispatchActionClass());
     });
   });
 
@@ -141,20 +143,31 @@ describe('AbstractAction', () => {
       const diContainer = {
         create: createMock
       };
+
       const action = new ModifyAgeAction(30);
-      const action2 =  new ModifyAgeAction(30);
-      const action3 = new ModifyAgeAction(30);
+      const action2 =  new ModifyAgeAction(32);
+      const action3 = new ModifyAgeAction(34);
+      const action4 = new ModifyAgeAction(36);
+
       const promise = Promise.resolve(action);
       const promise2 = Promise.resolve(action2);
+      const promise3 = Promise.resolve(action4);
+
       createMock.mockReturnValueOnce(promise);
       createMock.mockReturnValueOnce(promise2);
+      createMock.mockReturnValueOnce(promise3);
+
       const dispatchingAction = new DispatchingAction(dispatchAction);
 
       // WHEN
       dispatchingAction.dispatchActionsWithDi(diContainer, [
-        [AsyncModifyAgeAction, { age: 30 }],
+        [AsyncModifyAgeAction, [30]],
+        [AsyncModifyAgeAction, 30],
         AsyncModifyAgeAction,
-        action3
+        ModifyAgeAction,
+        action3,
+        [ModifyAgeAction, 40],
+        [ModifyAgeAction, [50]]
       ]);
 
       // THEN
@@ -162,6 +175,10 @@ describe('AbstractAction', () => {
         expect(dispatchAction).toHaveBeenCalledWith(action);
         expect(dispatchAction).toHaveBeenCalledWith(action2);
         expect(dispatchAction).toHaveBeenCalledWith(action3);
+        expect(dispatchAction).toHaveBeenCalledWith(action4);
+        expect(dispatchAction).toHaveBeenCalledWith(new ModifyAgeAction());
+        expect(dispatchAction).toHaveBeenCalledWith(new ModifyAgeAction(40));
+        expect(dispatchAction).toHaveBeenCalledWith(new ModifyAgeAction(50));
       });
     });
   });

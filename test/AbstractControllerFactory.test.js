@@ -20,201 +20,205 @@ beforeEach(() => {
   createActionDispatcherMock.mockReturnValueOnce(dispatchActionMock);
 });
 
-describe('dispatchActionWithDi', () => {
-  it('should create action with dependencies injected and dispatch action', () => {
-    // GIVEN
-    class TestControllerFactory extends AbstractControllerFactory {
-      getDispatchFnNameToDispatchFnMap() {
-        return {
-          modifyAge: age => this.dispatchActionWithDi(ModifyAgeAction, { age })
-        };
+describe('AbstractControllerFactory', () => {
+  describe('dispatchActionWithDi', () => {
+    it('should create action with dependencies injected and dispatch action', () => {
+      // GIVEN
+      class TestControllerFactory extends AbstractControllerFactory {
+        getDispatchFnNameToDispatchFnMap() {
+          return {
+            modifyAge: age => this.dispatchActionWithDi(ModifyAgeAction, age)
+          };
+        }
       }
-    }
-    const action = new ModifyAgeAction(39);
-    const promise = Promise.resolve(action);
-    diContainerMock.create.mockReturnValueOnce(promise);
 
-    // WHEN
-    const controller = new TestControllerFactory(dispatchMock, '', diContainerMock).createController();
-    controller.modifyAge(30);
+      const action = new ModifyAgeAction(39);
+      const promise = Promise.resolve(action);
+      diContainerMock.create.mockReturnValueOnce(promise);
 
-    // THEN
-    return promise.then(() => {
-      expect(dispatchActionMock).toHaveBeenCalledWith(action);
+      // WHEN
+      const controller = new TestControllerFactory(dispatchMock, '', diContainerMock).createController();
+      controller.modifyAge(30);
+
+      // THEN
+      return promise.then(() => {
+        expect(dispatchActionMock).toHaveBeenCalledWith(action);
+      });
+    });
+
+    it('should throw error if DI container is not supplied', () => {
+      // GIVEN
+      class TestControllerFactory extends AbstractControllerFactory {
+        getDispatchFnNameToDispatchFnMap() {
+          return {
+            modifyAge: (age) => this.dispatchActionWithDi(ModifyAgeAction, { age })
+          };
+        }
+      }
+
+      const action = new ModifyAgeAction(39);
+      const promise = Promise.resolve(action);
+      diContainerMock.create.mockReturnValueOnce(promise);
+
+      // WHEN
+      try {
+        const controller = new TestControllerFactory(dispatchMock).createController();
+        controller.modifyAge(30);
+        // THEN
+        fail();
+      } catch (error) {
+        // THEN
+        expect(error.message).toBe('diContainer argument is missing');
+      }
     });
   });
 
-  it('should throw error if DI container is not supplied', () => {
-    // GIVEN
-    class TestControllerFactory extends AbstractControllerFactory {
-      getDispatchFnNameToDispatchFnMap() {
-        return {
-          modifyAge: age => this.dispatchActionWithDi(ModifyAgeAction, { age })
-        };
+  describe('createController', () => {
+    it('should create controller without DI container', () => {
+      // GIVEN
+      class TestControllerFactory extends AbstractControllerFactory {
+        getDispatchFnNameToActionClassMap() {
+          return {
+            modifyAge: ModifyAgeAction
+          };
+        }
       }
-    }
-    const action = new ModifyAgeAction(39);
-    const promise = Promise.resolve(action);
-    diContainerMock.create.mockReturnValueOnce(promise);
 
-    // WHEN
-    try {
+      // WHEN
       const controller = new TestControllerFactory(dispatchMock).createController();
       controller.modifyAge(30);
+
       // THEN
-      fail();
-    } catch (error) {
-      // THEN
-      expect(error.message).toBe('diContainer argument is missing');
-    }
-  });
-});
-
-describe('createController', () => {
-  it('should create controller without DI container', () => {
-    // GIVEN
-    class TestControllerFactory extends AbstractControllerFactory {
-      getDispatchFnNameToActionClassMap() {
-        return {
-          modifyAge: ModifyAgeAction
-        };
-      }
-    }
-
-    // WHEN
-    const controller = new TestControllerFactory(dispatchMock).createController();
-    controller.modifyAge(30);
-
-    // THEN
-    expect(dispatchActionMock).toBeCalledTimes(1);
-    expect(dispatchActionMock).toHaveBeenCalledWith(new ModifyAgeAction(30));
-  });
-
-  it('should create controller with supplied additional functions', () => {
-    // GIVEN
-    const additionalFuncMock = jest.fn();
-
-    class TestControllerFactory extends AbstractControllerFactory {
-      getDispatchFnNameToActionClassMap() {
-        return {
-          modifyAge: ModifyAgeAction
-        };
-      }
-      getDispatchFnNameToDispatchFnMap() {
-        return {
-          additionalFuncName: additionalFuncMock
-        };
-      }
-    }
-
-    // WHEN
-    const controller = new TestControllerFactory(dispatchMock).createController();
-    controller.modifyAge(30);
-
-    // THEN
-    expect(dispatchActionMock).toBeCalledTimes(1);
-    expect(dispatchActionMock).toHaveBeenCalledWith(new ModifyAgeAction(30));
-    expect(controller.additionalFuncName).toBe(additionalFuncMock);
-  });
-
-  it('should create controller with supplied functions only', () => {
-    // GIVEN
-    const additionalFuncMock = jest.fn();
-
-    class TestControllerFactory extends AbstractControllerFactory {
-      getDispatchFnNameToDispatchFnMap() {
-        return {
-          additionalFuncName: additionalFuncMock
-        };
-      }
-    }
-
-    // WHEN
-    const controller = new TestControllerFactory(dispatchMock).createController();
-
-    // THEN
-    expect(controller.additionalFuncName).toBe(additionalFuncMock);
-  });
-
-  it('should create namespaced controller', () => {
-    // GIVEN
-    class TestControllerFactory extends AbstractControllerFactory {
-      getDispatchFnNameToActionClassMap() {
-        return {
-          modifyAge: NamespacedModifyAgeAction
-        };
-      }
-    }
-
-    // WHEN
-    const controller = new TestControllerFactory(dispatchMock, 'test').createController();
-    controller.modifyAge(30);
-
-    // THEN
-    expect(dispatchActionMock).toBeCalledTimes(1);
-    expect(dispatchActionMock).toHaveBeenCalledWith(new NamespacedModifyAgeAction('test', 30));
-  });
-
-  it('should create controller with DI container', () => {
-    // GIVEN
-    class TestControllerFactory extends AbstractControllerFactory {
-      getDispatchFnNameToActionClassMap() {
-        return {
-          modifyAge: AsyncModifyAgeAction
-        };
-      }
-    }
-
-    const createdAction = new ModifyAgeAction(39);
-    const createActionPromise = new Promise(function(resolve, reject) {
-      resolve(createdAction);
+      expect(dispatchActionMock).toBeCalledTimes(1);
+      expect(dispatchActionMock).toHaveBeenCalledWith(new ModifyAgeAction(30));
     });
 
-    diContainerMock.create.mockReturnValueOnce(createActionPromise);
+    it('should create controller with supplied additional functions', () => {
+      // GIVEN
+      const additionalFuncMock = jest.fn();
 
-    // WHEN
-    const controller = new TestControllerFactory(dispatchMock, '', diContainerMock).createController();
-    controller.modifyAge({ age: 30 });
+      class TestControllerFactory extends AbstractControllerFactory {
+        getDispatchFnNameToActionClassMap() {
+          return {
+            modifyAge: ModifyAgeAction
+          };
+        }
 
-    // THEN
-    expect(diContainerMock.create).toHaveBeenCalledWith(AsyncModifyAgeAction, {
-      age: 30,
-      stateNamespace: ''
-    });
-    expect(createActionPromise).resolves.toBe(createdAction);
-  });
-
-  it('should throw error if DI container is required but not supplied', () => {
-    // GIVEN
-    class TestControllerFactory extends AbstractControllerFactory {
-      getDispatchFnNameToActionClassMap() {
-        return {
-          modifyAge: AsyncModifyAgeAction
-        };
+        getDispatchFnNameToDispatchFnMap() {
+          return {
+            additionalFuncName: additionalFuncMock
+          };
+        }
       }
-    }
 
-    // WHEN + THEN
-    try {
-      new TestControllerFactory(dispatchMock).createController();
-      fail();
-    } catch (error) {
-      expect(error.message).toBe('diContainer argument is missing');
-    }
-  });
+      // WHEN
+      const controller = new TestControllerFactory(dispatchMock).createController();
+      controller.modifyAge(30);
 
-  it('should throw error if neither of abstract methods is overridden', () => {
-    // GIVEN
-    class TestControllerFactory extends AbstractControllerFactory {}
+      // THEN
+      expect(dispatchActionMock).toBeCalledTimes(1);
+      expect(dispatchActionMock).toHaveBeenCalledWith(new ModifyAgeAction(30));
+      expect(controller.additionalFuncName).toBe(additionalFuncMock);
+    });
 
-    // WHEN + THEN
-    try {
-      new TestControllerFactory(dispatchMock).createController();
-      fail();
-    } catch (error) {
-      expect(error.message).toBe(
-        'At least either getDispatchFnNameToActionClassMap() or getDispatchFnNameToDispatchFnMap() must be overridden'
-      );
-    }
+    it('should create controller with supplied functions only', () => {
+      // GIVEN
+      const additionalFuncMock = jest.fn();
+
+      class TestControllerFactory extends AbstractControllerFactory {
+        getDispatchFnNameToDispatchFnMap() {
+          return {
+            additionalFuncName: additionalFuncMock
+          };
+        }
+      }
+
+      // WHEN
+      const controller = new TestControllerFactory(dispatchMock).createController();
+
+      // THEN
+      expect(controller.additionalFuncName).toBe(additionalFuncMock);
+    });
+
+    it('should create namespaced controller', () => {
+      // GIVEN
+      class TestControllerFactory extends AbstractControllerFactory {
+        getDispatchFnNameToActionClassMap() {
+          return {
+            modifyAge: NamespacedModifyAgeAction
+          };
+        }
+      }
+
+      // WHEN
+      const controller = new TestControllerFactory(dispatchMock, 'test').createController();
+      controller.modifyAge(30);
+
+      // THEN
+      expect(dispatchActionMock).toBeCalledTimes(1);
+      expect(dispatchActionMock).toHaveBeenCalledWith(new NamespacedModifyAgeAction('test', 30));
+    });
+
+    it('should create controller with DI container', () => {
+      // GIVEN
+      class TestControllerFactory extends AbstractControllerFactory {
+        getDispatchFnNameToActionClassMap() {
+          return {
+            modifyAge: AsyncModifyAgeAction
+          };
+        }
+      }
+
+      const createdAction = new ModifyAgeAction(39);
+      const createActionPromise = new Promise(function(resolve, reject) {
+        resolve(createdAction);
+      });
+
+      diContainerMock.create.mockReturnValueOnce(createActionPromise);
+
+      // WHEN
+      const controller = new TestControllerFactory(dispatchMock, '', diContainerMock).createController();
+      controller.modifyAge(30);
+
+      // THEN
+      expect(diContainerMock.create).toHaveBeenCalledWith(AsyncModifyAgeAction, {
+        stateNamespace: ''
+      }, 30);
+      expect(createActionPromise).resolves.toBe(createdAction);
+    });
+
+    it('should throw error if DI container is required but not supplied', () => {
+      // GIVEN
+      class TestControllerFactory extends AbstractControllerFactory {
+        getDispatchFnNameToActionClassMap() {
+          return {
+            modifyAge: AsyncModifyAgeAction
+          };
+        }
+      }
+
+      // WHEN + THEN
+      try {
+        new TestControllerFactory(dispatchMock).createController();
+        fail();
+      } catch (error) {
+        expect(error.message).toBe('diContainer argument is missing');
+      }
+    });
+
+    it('should throw error if neither of abstract methods is overridden', () => {
+      // GIVEN
+      class TestControllerFactory extends AbstractControllerFactory {}
+
+      // WHEN + THEN
+      try {
+        new TestControllerFactory(dispatchMock).createController();
+        fail();
+      } catch (error) {
+        expect(error.message).toBe(
+          'At least either getDispatchFnNameToActionClassMap() or getDispatchFnNameToDispatchFnMap() must be overridden'
+        );
+      }
+    });
   });
 });

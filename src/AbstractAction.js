@@ -39,28 +39,53 @@ export default class AbstractAction<StateType> {
   dispatchActionWithDi(
     diContainer: { create: (...args: Array<any>) => any },
     actionClass: Class<AbstractAction<any>>,
-    params: ?Object
+    ...args: Array<any>
   ) {
-    diContainer.create(actionClass, params).then((action: any) => this.dispatchAction(action));
+    diContainer.create(actionClass, {}, args).then((action: any) => this.dispatchAction(action));
   }
 
-  dispatchActions(actions: Array<AbstractAction<any>>) {
-    actions.forEach((action: AbstractAction<any>) => this.dispatchAction(action));
+  dispatchActions(actions: Array<Class<AbstractAction<any>> | AbstractAction<any>>) {
+    actions.forEach((action: Class<AbstractAction<any>> | AbstractAction<any>) => {
+      if (typeof action === 'function') {
+        this.dispatchAction(new action());
+      } else {
+        this.dispatchAction(action);
+      }
+    });
   }
 
   dispatchActionsWithDi(
     diContainer: { create: (...args: Array<any>) => any },
-    actionDefs: Array<[Class<AbstractAction<any>>, Object] | Class<AbstractAction<any>> | AbstractAction<any>>
+    actionDefs: Array<
+      [Class<AbstractAction<any>>, any] | Class<AbstractAction<any>> | AbstractAction<any>
+    >
   ) {
     actionDefs.forEach(
       (
-        actionDef: [Class<AbstractAction<any>>, Object] | Class<AbstractAction<any>> | AbstractAction<any>
+        actionDef: [Class<AbstractAction<any>>, any] | Class<AbstractAction<any>> | AbstractAction<any>
       ) => {
         if (Array.isArray(actionDef)) {
-          const [actionClass, params] = actionDef;
-          this.dispatchActionWithDi(diContainer, actionClass, params);
+          const [actionClass, args] = actionDef;
+          if (actionDef.toString().includes('dispatchAction')) {
+            if (Array.isArray(args)) {
+              this.dispatchActionWithDi(diContainer, actionClass, ...args);
+            } else {
+              this.dispatchActionWithDi(diContainer, actionClass, args);
+            }
+          }
+          else {
+            if (Array.isArray(args)) {
+              this.dispatchAction(new actionClass(...args));
+            } else {
+              this.dispatchAction(new actionClass(args));
+            }
+          }
         } else if (typeof actionDef === 'function') {
-          this.dispatchActionWithDi(diContainer, actionDef[0]);
+          if (actionDef.toString().includes('dispatchAction')) {
+            this.dispatchActionWithDi(diContainer, actionDef);
+          } else {
+            this.dispatchAction(new actionDef());
+          }
         } else {
           this.dispatchAction(actionDef);
         }
