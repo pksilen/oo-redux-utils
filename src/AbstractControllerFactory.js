@@ -39,8 +39,18 @@ export default class AbstractControllerFactory {
     const dispatchFnNameToDispatchFnMap = Object.entries(this.getDispatchFnNameToActionClassMap()).reduce(
       (
         accumulatedValue: { [string]: (Array<any>) => void },
-        [dispatchFnName, ActionClass]: [string, any]
+        [dispatchFnName, ActionClassOrArray]: [string, any]
       ) => {
+        let ActionClass = ActionClassOrArray; // NOSONAR
+        let firstArgs = []; // NOSONAR
+
+        if (Array.isArray(ActionClassOrArray)) {
+          [ActionClass, firstArgs] = ActionClassOrArray;
+          if (!Array.isArray(firstArgs)) {
+            firstArgs = [firstArgs];
+          }
+        }
+
         const actionClassFunctionString = ActionClass.toString();
 
         if (actionClassFunctionString.includes('dispatchAction')) {
@@ -48,7 +58,7 @@ export default class AbstractControllerFactory {
             accumulatedValue[dispatchFnName] = (...args: Array<any>) =>
               // $FlowFixMe
               this.diContainer
-                .create(ActionClass, { stateNamespace: this.stateNamespace }, ...args)
+                .create(ActionClass, { stateNamespace: this.stateNamespace }, ...firstArgs, ...args)
                 .then((action: any) => this.dispatchAction(action));
           } else {
             throw new Error('diContainer argument is missing');
@@ -56,10 +66,10 @@ export default class AbstractControllerFactory {
         } else {
           if (actionClassFunctionString.includes('stateNamespace')) {
             accumulatedValue[dispatchFnName] = (...args: Array<any>) =>
-              this.dispatchAction(new ActionClass(this.stateNamespace, ...args));
+              this.dispatchAction(new ActionClass(this.stateNamespace, ...firstArgs, ...args));
           } else {
             accumulatedValue[dispatchFnName] = (...args: Array<any>) => {
-              this.dispatchAction(new ActionClass(...args));
+              this.dispatchAction(new ActionClass(...firstArgs, ...args));
             };
           }
         }
@@ -76,7 +86,7 @@ export default class AbstractControllerFactory {
   }
 
   /* abstract */
-  getDispatchFnNameToActionClassMap(): { [string]: Class<AbstractAction<any>> } {
+  getDispatchFnNameToActionClassMap(): { [string]: Class<AbstractAction<any>> | [Class<AbstractAction<any>>, any] } {
     if (Object.keys(this.getDispatchFnNameToDispatchFnMap()).length === 0) {
       throw new Error(
         'At least either getDispatchFnNameToActionClassMap() or getDispatchFnNameToDispatchFnMap() must be overridden'

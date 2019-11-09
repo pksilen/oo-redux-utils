@@ -74,7 +74,7 @@ describe('AbstractControllerFactory', () => {
   });
 
   describe('createController', () => {
-    it('should create controller without DI container', () => {
+    it('should create controller that dispatches action without DI container', () => {
       // GIVEN
       class TestControllerFactory extends AbstractControllerFactory {
         getDispatchFnNameToActionClassMap() {
@@ -87,6 +87,44 @@ describe('AbstractControllerFactory', () => {
       // WHEN
       const controller = new TestControllerFactory(dispatchMock).createController();
       controller.modifyAge(30);
+
+      // THEN
+      expect(dispatchActionMock).toBeCalledTimes(1);
+      expect(dispatchActionMock).toHaveBeenCalledWith(new ModifyAgeAction(30));
+    });
+
+    it('should create controller that dispatches action with argument without DI container', () => {
+      // GIVEN
+      class TestControllerFactory extends AbstractControllerFactory {
+        getDispatchFnNameToActionClassMap() {
+          return {
+            modifyAge: [ModifyAgeAction, 30]
+          };
+        }
+      }
+
+      // WHEN
+      const controller = new TestControllerFactory(dispatchMock).createController();
+      controller.modifyAge();
+
+      // THEN
+      expect(dispatchActionMock).toBeCalledTimes(1);
+      expect(dispatchActionMock).toHaveBeenCalledWith(new ModifyAgeAction(30));
+    });
+
+    it('should create controller that dispatches action with arguments without DI container', () => {
+      // GIVEN
+      class TestControllerFactory extends AbstractControllerFactory {
+        getDispatchFnNameToActionClassMap() {
+          return {
+            modifyAge: [ModifyAgeAction, [30]]
+          };
+        }
+      }
+
+      // WHEN
+      const controller = new TestControllerFactory(dispatchMock).createController();
+      controller.modifyAge();
 
       // THEN
       expect(dispatchActionMock).toBeCalledTimes(1);
@@ -197,11 +235,12 @@ describe('AbstractControllerFactory', () => {
         }
       }
 
-      // WHEN + THEN
       try {
+        // WHEN
         new TestControllerFactory(dispatchMock).createController();
         fail();
       } catch (error) {
+        // THEN
         expect(error.message).toBe('diContainer argument is missing');
       }
     });
@@ -210,11 +249,12 @@ describe('AbstractControllerFactory', () => {
       // GIVEN
       class TestControllerFactory extends AbstractControllerFactory {}
 
-      // WHEN + THEN
       try {
+        // WHEN
         new TestControllerFactory(dispatchMock).createController();
         fail();
       } catch (error) {
+        // THEN
         expect(error.message).toBe(
           'At least either getDispatchFnNameToActionClassMap() or getDispatchFnNameToDispatchFnMap() must be overridden'
         );
