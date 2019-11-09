@@ -75,7 +75,7 @@ export default class ControllerFactory {
 
   /* abstract */
   getDispatchFnNameToActionClassMap(): { [string]: Class<AbstractAction<any>> } {
-    if (Object.keys(this.getDispatchFnNameToDispatchFnMap(false)).length === 0) {
+    if (Object.keys(this.getDispatchFnNameToDispatchFnMap()).length === 0) {
       throw new Error(
         'At least either getDispatchFnNameToActionClassMap() or getDispatchFnNameToDispatchFnMap() must be overridden'
       );
@@ -83,7 +83,7 @@ export default class ControllerFactory {
     return {};
   }
 
-  getDispatchFnNameToDispatchFnMap(shouldCheck: boolean = true): { [string]: (Array<any>) => void } {
+  getDispatchFnNameToDispatchFnMap(): { [string]: (Array<any>) => void } {
     return {};
   }
 }
