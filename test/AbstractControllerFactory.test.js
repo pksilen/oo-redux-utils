@@ -1,5 +1,5 @@
 import ModifyAgeAction from './ModifyAgeAction';
-import ControllerFactory from '../src/ControllerFactory';
+import AbstractControllerFactory from '../src/AbstractControllerFactory';
 import DispatchUtils from '../src/DispatchUtils';
 import NamespacedModifyAgeAction from './NamespacedModifyAgeAction';
 import AsyncModifyAgeAction from './AsyncModifyAgeAction';
@@ -23,7 +23,7 @@ beforeEach(() => {
 describe('dispatchActionWithDi', () => {
   it('should create action with dependencies injected and dispatch action', () => {
     // GIVEN
-    class TestControllerFactory extends ControllerFactory {
+    class TestControllerFactory extends AbstractControllerFactory {
       getDispatchFnNameToDispatchFnMap() {
         return {
           modifyAge: age => this.dispatchActionWithDi(ModifyAgeAction, { age })
@@ -46,7 +46,7 @@ describe('dispatchActionWithDi', () => {
 
   it('should throw error if DI container is not supplied', () => {
     // GIVEN
-    class TestControllerFactory extends ControllerFactory {
+    class TestControllerFactory extends AbstractControllerFactory {
       getDispatchFnNameToDispatchFnMap() {
         return {
           modifyAge: age => this.dispatchActionWithDi(ModifyAgeAction, { age })
@@ -73,7 +73,7 @@ describe('dispatchActionWithDi', () => {
 describe('createController', () => {
   it('should create controller without DI container', () => {
     // GIVEN
-    class TestControllerFactory extends ControllerFactory {
+    class TestControllerFactory extends AbstractControllerFactory {
       getDispatchFnNameToActionClassMap() {
         return {
           modifyAge: ModifyAgeAction
@@ -94,7 +94,7 @@ describe('createController', () => {
     // GIVEN
     const additionalFuncMock = jest.fn();
 
-    class TestControllerFactory extends ControllerFactory {
+    class TestControllerFactory extends AbstractControllerFactory {
       getDispatchFnNameToActionClassMap() {
         return {
           modifyAge: ModifyAgeAction
@@ -121,7 +121,7 @@ describe('createController', () => {
     // GIVEN
     const additionalFuncMock = jest.fn();
 
-    class TestControllerFactory extends ControllerFactory {
+    class TestControllerFactory extends AbstractControllerFactory {
       getDispatchFnNameToDispatchFnMap() {
         return {
           additionalFuncName: additionalFuncMock
@@ -138,7 +138,7 @@ describe('createController', () => {
 
   it('should create namespaced controller', () => {
     // GIVEN
-    class TestControllerFactory extends ControllerFactory {
+    class TestControllerFactory extends AbstractControllerFactory {
       getDispatchFnNameToActionClassMap() {
         return {
           modifyAge: NamespacedModifyAgeAction
@@ -157,7 +157,7 @@ describe('createController', () => {
 
   it('should create controller with DI container', () => {
     // GIVEN
-    class TestControllerFactory extends ControllerFactory {
+    class TestControllerFactory extends AbstractControllerFactory {
       getDispatchFnNameToActionClassMap() {
         return {
           modifyAge: AsyncModifyAgeAction
@@ -186,7 +186,7 @@ describe('createController', () => {
 
   it('should throw error if DI container is required but not supplied', () => {
     // GIVEN
-    class TestControllerFactory extends ControllerFactory {
+    class TestControllerFactory extends AbstractControllerFactory {
       getDispatchFnNameToActionClassMap() {
         return {
           modifyAge: AsyncModifyAgeAction
@@ -205,7 +205,7 @@ describe('createController', () => {
 
   it('should throw error if neither of abstract methods is overridden', () => {
     // GIVEN
-    class TestControllerFactory extends ControllerFactory {}
+    class TestControllerFactory extends AbstractControllerFactory {}
 
     // WHEN + THEN
     try {
