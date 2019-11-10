@@ -4,6 +4,7 @@ import type { Dispatch } from './DispatchWrapper';
 import DispatchUtils from './DispatchUtils';
 import AbstractAction from './AbstractAction';
 import type { DispatchAction, DispatchActionToComponentType } from './DispatchUtils';
+import type { Controller } from './Controller';
 
 export default class AbstractControllerFactory {
   dispatchAction: DispatchAction;
@@ -35,10 +36,10 @@ export default class AbstractControllerFactory {
     }
   }
 
-  createController() {
+  createController(): Controller {
     const dispatchFnNameToDispatchFnMap = Object.entries(this.getDispatchFnNameToActionClassMap()).reduce(
       (
-        accumulatedValue: { [string]: (Array<any>) => void },
+        accumulatedValue: Controller,
         [dispatchFnName, ActionClassOrArray]: [string, any]
       ) => {
         let ActionClass = ActionClassOrArray; // NOSONAR

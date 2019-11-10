@@ -1,3 +1,3 @@
 // @flow
 
-export type Controller = { [string]: (Array<any>) => void };
+export type Controller = { [string]: (...args: Array<any>) => void };
