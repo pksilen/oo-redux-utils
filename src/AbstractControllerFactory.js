@@ -38,10 +38,7 @@ export default class AbstractControllerFactory {
 
   createController(): Controller {
     const dispatchFnNameToDispatchFnMap = Object.entries(this.getDispatchFnNameToActionClassMap()).reduce(
-      (
-        accumulatedValue: Controller,
-        [dispatchFnName, ActionClassOrArray]: [string, any]
-      ) => {
+      (accumulatedValue: Controller, [dispatchFnName, ActionClassOrArray]: [string, any]) => {
         let ActionClass = ActionClassOrArray; // NOSONAR
         let firstArgs = []; // NOSONAR
 
@@ -87,7 +84,9 @@ export default class AbstractControllerFactory {
   }
 
   /* abstract */
-  getDispatchFnNameToActionClassMap(): { [string]: Class<AbstractAction<any>> | [Class<AbstractAction<any>>, any] } {
+  getDispatchFnNameToActionClassMap(): {
+    [string]: Class<AbstractAction<any>> | [Class<AbstractAction<any>>, any]
+  } {
     if (Object.keys(this.getDispatchFnNameToDispatchFnMap()).length === 0) {
       throw new Error(
         'At least either getDispatchFnNameToActionClassMap() or getDispatchFnNameToDispatchFnMap() must be overridden'
@@ -96,7 +95,7 @@ export default class AbstractControllerFactory {
     return {};
   }
 
-  getDispatchFnNameToDispatchFnMap(): { [string]: (Array<any>) => void } {
+  getDispatchFnNameToDispatchFnMap(): Controller {
     return {};
   }
 }
