@@ -92,6 +92,22 @@ describe('AbstractAction', () => {
     });
   });
 
+  describe('dispatchAsyncAction', () => {
+    it('should dispatch action if action dispatcher is given as constructor parameter', () => {
+      // GIVEN
+      const dispatchAction = jest.fn();
+      const dispatchingAction = new DispatchingAction(dispatchAction);
+      const toDispatchAction = new DispatchingAction();
+
+      // WHEN
+      dispatchingAction.dispatchAsyncAction(toDispatchAction);
+
+      // THEN
+      expect(dispatchAction).toHaveBeenCalledTimes(1);
+      expect(dispatchAction).toHaveBeenCalledWith(toDispatchAction);
+    });
+  });
+
   describe('dispatchActionWithDi', () => {
     it('should create action with dependencies injected and dispatch action', () => {
       // GIVEN

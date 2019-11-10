@@ -36,6 +36,12 @@ export default class AbstractAction<StateType> {
     }
   }
 
+  dispatchAsyncAction(action: AbstractAction<any>) {
+    if (this.dispatchAction_) {
+      this.dispatchAction_(action);
+    }
+  }
+
   dispatchActionWithDi(
     diContainer: { create: (...args: Array<any>) => any },
     actionClass: Class<AbstractAction<any>>,
