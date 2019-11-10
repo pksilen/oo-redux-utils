@@ -13,10 +13,4 @@ export default class DispatchUtils {
       dispatch({ type: action });
     };
   }
-
-  static createActionDispatcherToComponentType(dispatch: Dispatch): DispatchActionToComponentType {
-    return function(action: AbstractAction<any>, componentType: React.ComponentType<any>) {
-      dispatch({ type: action, receivingComponentType: componentType });
-    };
-  }
 }

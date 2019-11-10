@@ -3,13 +3,11 @@
 import type { Dispatch } from './DispatchWrapper';
 import DispatchUtils from './DispatchUtils';
 import AbstractAction from './AbstractAction';
-import type { DispatchAction, DispatchActionToComponentType } from './DispatchUtils';
+import type { DispatchAction } from './DispatchUtils';
 import type { Controller } from './Controller';
 
 export default class AbstractControllerFactory {
   dispatchAction: DispatchAction;
-
-  dispatchActionToComponentType: DispatchActionToComponentType;
 
   diContainer: { create: (...args: Array<any>) => any } | void;
 
@@ -21,7 +19,6 @@ export default class AbstractControllerFactory {
     diContainer: { create: (...args: Array<any>) => any } | void
   ) {
     this.dispatchAction = DispatchUtils.createActionDispatcher(dispatch);
-    this.dispatchActionToComponentType = DispatchUtils.createActionDispatcherToComponentType(dispatch);
     this.diContainer = diContainer;
     this.stateNamespace = stateNamespace;
   }
@@ -83,7 +80,6 @@ export default class AbstractControllerFactory {
     };
   }
 
-  /* abstract */
   getDispatchFnNameToActionClassMap(): {
     [string]: Class<AbstractAction<any>> | [Class<AbstractAction<any>>, any]
   } {
