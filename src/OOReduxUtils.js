@@ -7,17 +7,14 @@ import type { ActionObject } from './DispatchWrapper';
 function createStateReducer<StateType>(
   initialState: StateType,
   actionBaseClass: Class<AbstractAction<any>>,
-  stateNamespace: string,
-  componentType?: React.ComponentType<any>
+  stateNamespace: string
 ): (StateType | void, ActionObject) => StateType {
   if (actionBaseClass === AbstractAction) {
     throw new Error('actionBaseClass must be a class extended from AbstractAction');
   }
 
   return function(currentState: StateType = initialState, action: ActionObject): StateType {
-    return ((action.receivingComponentType && action.receivingComponentType === componentType) ||
-      (!action.receivingComponentType && action.type instanceof actionBaseClass)) &&
-      action.type.getStateNamespace() === stateNamespace
+    return action.type instanceof actionBaseClass && action.type.getStateNamespace() === stateNamespace
       ? action.type.performActionAndReturnNewState(currentState)
       : currentState;
   };
@@ -58,24 +55,5 @@ export default class OOReduxUtils {
     stateNamespace: string
   ): (StateType | void, ActionObject) => StateType {
     return createStateReducer(initialState, actionBaseClass, stateNamespace);
-  }
-
-  // noinspection JSUnusedGlobalSymbols
-  static createStateReducerWithComponentType<StateType>(
-    initialState: StateType,
-    actionBaseClass: Class<AbstractAction<any>>,
-    componentType: React.ComponentType<any>
-  ): (StateType | void, ActionObject) => StateType {
-    return createStateReducer(initialState, actionBaseClass, '', componentType);
-  }
-
-  // noinspection JSUnusedGlobalSymbols
-  static createNamespacedStateReducerWithComponentType<StateType>(
-    initialState: StateType,
-    actionBaseClass: Class<AbstractAction<any>>,
-    stateNamespace: string,
-    componentType: React.ComponentType<any>
-  ): (StateType | void, ActionObject) => StateType {
-    return createStateReducer(initialState, actionBaseClass, stateNamespace, componentType);
   }
 }
