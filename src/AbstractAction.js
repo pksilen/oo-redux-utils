@@ -28,7 +28,10 @@ export default class AbstractAction<StateType> {
   }
 
   dispatchAction(action: AbstractAction<any>) {
-    if (action.getBaseActionClass() === this.getBaseActionClass()) {
+    if (
+      action.getBaseActionClass() === this.getBaseActionClass() &&
+      action.getStateNamespace() === this.stateNamespace
+    ) {
       throw new Error('Cannot dispatch actions from same base class');
     }
     if (this.dispatchAction_) {
@@ -62,14 +65,10 @@ export default class AbstractAction<StateType> {
 
   dispatchActionsWithDi(
     diContainer: { create: (...args: Array<any>) => any },
-    actionDefs: Array<
-      [Class<AbstractAction<any>>, any] | Class<AbstractAction<any>> | AbstractAction<any>
-    >
+    actionDefs: Array<[Class<AbstractAction<any>>, any] | Class<AbstractAction<any>> | AbstractAction<any>>
   ) {
     actionDefs.forEach(
-      (
-        actionDef: [Class<AbstractAction<any>>, any] | Class<AbstractAction<any>> | AbstractAction<any>
-      ) => {
+      (actionDef: [Class<AbstractAction<any>>, any] | Class<AbstractAction<any>> | AbstractAction<any>) => {
         if (Array.isArray(actionDef)) {
           const [actionClass, args] = actionDef;
           if (actionDef.toString().includes('dispatchAction')) {
@@ -78,8 +77,7 @@ export default class AbstractAction<StateType> {
             } else {
               this.dispatchActionWithDi(diContainer, actionClass, args);
             }
-          }
-          else {
+          } else {
             if (Array.isArray(args)) {
               this.dispatchAction(new actionClass(...args));
             } else {
