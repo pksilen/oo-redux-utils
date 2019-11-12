@@ -46,7 +46,7 @@ export default class AbstractControllerFactory {
           }
         }
 
-        if (ActionClass.name.includes('DiAction')) {
+        if (ActionClass.name.endsWith('DiAction')) {
           if (this.diContainer) {
             accumulatedValue[dispatchFnName] = (...args: Array<any>) =>
               // $FlowFixMe
@@ -57,7 +57,7 @@ export default class AbstractControllerFactory {
             throw new Error('diContainer argument is missing');
           }
         } else {
-          if (ActionClass.name.includes('NamespacedAction')) {
+          if (ActionClass.name.endsWith('NsAction')) {
             accumulatedValue[dispatchFnName] = (...args: Array<any>) =>
               this.dispatchAction(new ActionClass(this.stateNamespace, ...firstArgs, ...args));
           } else {

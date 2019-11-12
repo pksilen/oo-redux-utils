@@ -1,7 +1,7 @@
 import ModifyAgeAction from './ModifyAgeAction';
 import AbstractControllerFactory from '../src/AbstractControllerFactory';
 import DispatchUtils from '../src/DispatchUtils';
-import ModifyAgeNamespacedAction from './ModifyAgeNamespacedAction';
+import ModifyAgeNsAction from './ModifyAgeNsAction';
 import ModifyAgeDiAction from './ModifyAgeDiAction';
 import AnotherAction from './AnotherAction';
 
@@ -184,7 +184,7 @@ describe('AbstractControllerFactory', () => {
       class TestControllerFactory extends AbstractControllerFactory {
         getDispatchFnNameToActionClassMap() {
           return {
-            modifyAge: ModifyAgeNamespacedAction
+            modifyAge: ModifyAgeNsAction
           };
         }
       }
@@ -195,7 +195,7 @@ describe('AbstractControllerFactory', () => {
 
       // THEN
       expect(dispatchActionMock).toBeCalledTimes(1);
-      expect(dispatchActionMock).toHaveBeenCalledWith(new ModifyAgeNamespacedAction('test', 30));
+      expect(dispatchActionMock).toHaveBeenCalledWith(new ModifyAgeNsAction('test', 30));
     });
 
     it('should create controller that dispatches no argument action', () => {

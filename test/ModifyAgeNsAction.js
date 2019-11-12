@@ -8,7 +8,7 @@ type TestState = $Exact<{
   age: number
 }>;
 
-export default class ModifyAgeNamespacedAction extends AbstractAction<TestState> {
+export default class ModifyAgeNsAction extends AbstractAction<TestState> {
   age: number;
 
   constructor(stateNamespace: string, age: number) {
