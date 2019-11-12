@@ -17,6 +17,10 @@ export default class ModifyAgeDiAction extends AbstractAction<TestState> {
     this.age = params.age;
   }
 
+  static needsDependencyInjection(): boolean {
+    return true;
+  }
+
   performActionAndReturnNewState(currentState: TestState): TestState {
     return {
       ...currentState,

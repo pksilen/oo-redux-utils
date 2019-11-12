@@ -15,6 +15,14 @@ export default class AbstractAction<StateType> {
     this.actionClassName = this.constructor.name;
   }
 
+  static isNamespaced(): boolean {
+    return false;
+  }
+
+  static needsDependencyInjection(): boolean {
+    return false;
+  }
+
   getBaseActionClass(): Class<AbstractAction<any>> {
     throw new Error('Abstract method called');
   }

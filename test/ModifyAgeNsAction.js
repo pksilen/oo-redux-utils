@@ -16,6 +16,10 @@ export default class ModifyAgeNsAction extends AbstractAction<TestState> {
     this.age = age;
   }
 
+  static isNamespaced(): boolean {
+    return true;
+  }
+
   performActionAndReturnNewState(currentState: TestState): TestState {
     return {
       ...currentState,
