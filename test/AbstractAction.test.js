@@ -1,7 +1,7 @@
 import { AbstractAction } from '../src';
 import ModifyAgeAction from './ModifyAgeAction';
 import DispatchingAction from './DispatchingAction';
-import AsyncModifyAgeAction from './AsyncModifyAgeAction';
+import ModifyAgeDiAction from './ModifyAgeDiAction';
 
 describe('AbstractAction', () => {
   describe('getBaseActionClass', () => {
@@ -122,7 +122,7 @@ describe('AbstractAction', () => {
       const dispatchingAction = new DispatchingAction(dispatchAction);
 
       // WHEN
-      dispatchingAction.dispatchActionWithDi(diContainer, AsyncModifyAgeAction,  30);
+      dispatchingAction.dispatchActionWithDi(diContainer, ModifyAgeDiAction,  30);
 
       // THEN
       return promise.then(() => {
@@ -177,9 +177,9 @@ describe('AbstractAction', () => {
 
       // WHEN
       dispatchingAction.dispatchActionsWithDi(diContainer, [
-        [AsyncModifyAgeAction, [30]],
-        [AsyncModifyAgeAction, 30],
-        AsyncModifyAgeAction,
+        [ModifyAgeDiAction, [30]],
+        [ModifyAgeDiAction, 30],
+        ModifyAgeDiAction,
         ModifyAgeAction,
         action3,
         [ModifyAgeAction, 40],

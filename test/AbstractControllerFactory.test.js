@@ -1,8 +1,9 @@
 import ModifyAgeAction from './ModifyAgeAction';
 import AbstractControllerFactory from '../src/AbstractControllerFactory';
 import DispatchUtils from '../src/DispatchUtils';
-import NamespacedModifyAgeAction from './NamespacedModifyAgeAction';
-import AsyncModifyAgeAction from './AsyncModifyAgeAction';
+import ModifyAgeNamespacedAction from './ModifyAgeNamespacedAction';
+import ModifyAgeDiAction from './ModifyAgeDiAction';
+import AnotherAction from './AnotherAction';
 
 let dispatchMock;
 let dispatchActionMock;
@@ -183,7 +184,7 @@ describe('AbstractControllerFactory', () => {
       class TestControllerFactory extends AbstractControllerFactory {
         getDispatchFnNameToActionClassMap() {
           return {
-            modifyAge: NamespacedModifyAgeAction
+            modifyAge: ModifyAgeNamespacedAction
           };
         }
       }
@@ -194,7 +195,26 @@ describe('AbstractControllerFactory', () => {
 
       // THEN
       expect(dispatchActionMock).toBeCalledTimes(1);
-      expect(dispatchActionMock).toHaveBeenCalledWith(new NamespacedModifyAgeAction('test', 30));
+      expect(dispatchActionMock).toHaveBeenCalledWith(new ModifyAgeNamespacedAction('test', 30));
+    });
+
+    it('should create controller that dispatches no argument action', () => {
+      // GIVEN
+      class TestControllerFactory extends AbstractControllerFactory {
+        getDispatchFnNameToActionClassMap() {
+          return {
+            dispatchAnotherAction: AnotherAction
+          };
+        }
+      }
+
+      // WHEN
+      const controller = new TestControllerFactory(dispatchMock).createController();
+      controller.dispatchAnotherAction();
+
+      // THEN
+      expect(dispatchActionMock).toBeCalledTimes(1);
+      expect(dispatchActionMock).toHaveBeenCalledWith(new AnotherAction());
     });
 
     it('should create controller with DI container', () => {
@@ -202,7 +222,7 @@ describe('AbstractControllerFactory', () => {
       class TestControllerFactory extends AbstractControllerFactory {
         getDispatchFnNameToActionClassMap() {
           return {
-            modifyAge: AsyncModifyAgeAction
+            modifyAge: ModifyAgeDiAction
           };
         }
       }
@@ -219,7 +239,7 @@ describe('AbstractControllerFactory', () => {
       controller.modifyAge(30);
 
       // THEN
-      expect(diContainerMock.create).toHaveBeenCalledWith(AsyncModifyAgeAction, {
+      expect(diContainerMock.create).toHaveBeenCalledWith(ModifyAgeDiAction, {
         stateNamespace: ''
       }, 30);
       expect(createActionPromise).resolves.toBe(createdAction);
@@ -230,7 +250,7 @@ describe('AbstractControllerFactory', () => {
       class TestControllerFactory extends AbstractControllerFactory {
         getDispatchFnNameToActionClassMap() {
           return {
-            modifyAge: AsyncModifyAgeAction
+            modifyAge: ModifyAgeDiAction
           };
         }
       }

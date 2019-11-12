@@ -9,7 +9,7 @@ type TestState = $Exact<{
   age: number
 }>;
 
-export default class AsyncModifyAgeAction extends AbstractAction<TestState> {
+export default class ModifyAgeDiAction extends AbstractAction<TestState> {
   age: number;
 
   constructor(params: { dispatchAction: DispatchAction, age: number }) {

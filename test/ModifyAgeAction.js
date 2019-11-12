@@ -17,8 +17,8 @@ class ModifyAgeActionBase extends AbstractAction<TestState> {
 export default class ModifyAgeAction extends ModifyAgeActionBase {
   age: number;
 
-  constructor(age: number, namespace: string = '') {
-    super(namespace);
+  constructor(age: number) {
+    super('');
     this.age = age;
   }
 

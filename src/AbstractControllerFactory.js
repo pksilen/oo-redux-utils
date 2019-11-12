@@ -46,9 +46,7 @@ export default class AbstractControllerFactory {
           }
         }
 
-        const actionClassFunctionString = ActionClass.toString();
-
-        if (actionClassFunctionString.includes('dispatchAction')) {
+        if (ActionClass.name.includes('DiAction')) {
           if (this.diContainer) {
             accumulatedValue[dispatchFnName] = (...args: Array<any>) =>
               // $FlowFixMe
@@ -59,7 +57,7 @@ export default class AbstractControllerFactory {
             throw new Error('diContainer argument is missing');
           }
         } else {
-          if (actionClassFunctionString.includes('stateNamespace')) {
+          if (ActionClass.name.includes('NamespacedAction')) {
             accumulatedValue[dispatchFnName] = (...args: Array<any>) =>
               this.dispatchAction(new ActionClass(this.stateNamespace, ...firstArgs, ...args));
           } else {
