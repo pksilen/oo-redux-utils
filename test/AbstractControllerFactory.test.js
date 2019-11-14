@@ -4,6 +4,7 @@ import DispatchUtils from '../src/DispatchUtils';
 import ModifyAgeNsAction from './ModifyAgeNsAction';
 import ModifyAgeDiAction from './ModifyAgeDiAction';
 import AnotherAction from './AnotherAction';
+import ModifyAgeDiNsAction from './ModifyAgeDiNsAction';
 
 let dispatchMock;
 let dispatchActionMock;
@@ -28,7 +29,7 @@ describe('AbstractControllerFactory', () => {
       class TestControllerFactory extends AbstractControllerFactory {
         getDispatchFnNameToDispatchFnMap() {
           return {
-            modifyAge: age => this.dispatchActionWithDi(ModifyAgeAction, age)
+            modifyAge: (age) => this.dispatchActionWithDi(ModifyAgeAction, age)
           };
         }
       }
@@ -239,9 +240,33 @@ describe('AbstractControllerFactory', () => {
       controller.modifyAge(30);
 
       // THEN
-      expect(diContainerMock.create).toHaveBeenCalledWith(ModifyAgeDiAction, {
-        stateNamespace: ''
-      }, 30);
+      expect(diContainerMock.create).toHaveBeenCalledWith(ModifyAgeDiAction, {}, 30);
+      expect(createActionPromise).resolves.toBe(createdAction);
+    });
+
+    it('should create controller with DI container and namespace', () => {
+      // GIVEN
+      class TestControllerFactory extends AbstractControllerFactory {
+        getDispatchFnNameToActionClassMap() {
+          return {
+            modifyAge: ModifyAgeDiNsAction
+          };
+        }
+      }
+
+      const createdAction = new ModifyAgeNsAction(39);
+      const createActionPromise = new Promise(function(resolve, reject) {
+        resolve(createdAction);
+      });
+
+      diContainerMock.create.mockReturnValueOnce(createActionPromise);
+
+      // WHEN
+      const controller = new TestControllerFactory(dispatchMock, 'test', diContainerMock).createController();
+      controller.modifyAge(30);
+
+      // THEN
+      expect(diContainerMock.create).toHaveBeenCalledWith(ModifyAgeDiNsAction, {}, 'test', 30);
       expect(createActionPromise).resolves.toBe(createdAction);
     });
 

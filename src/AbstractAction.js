@@ -83,7 +83,7 @@ export default class AbstractAction<StateType> {
       (actionDef: [Class<AbstractAction<any>>, any] | Class<AbstractAction<any>> | AbstractAction<any>) => {
         if (Array.isArray(actionDef)) {
           const [actionClass, args] = actionDef;
-          if (actionDef.toString().includes('dispatchAction')) {
+          if (actionClass.needsDependencyInjection()) {
             if (Array.isArray(args)) {
               this.dispatchActionWithDi(diContainer, actionClass, ...args);
             } else {

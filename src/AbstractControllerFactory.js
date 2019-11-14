@@ -48,11 +48,19 @@ export default class AbstractControllerFactory {
 
         if (ActionClass.needsDependencyInjection()) {
           if (this.diContainer) {
-            accumulatedValue[dispatchFnName] = (...args: Array<any>) =>
-              // $FlowFixMe
-              this.diContainer
-                .create(ActionClass, { stateNamespace: this.stateNamespace }, ...firstArgs, ...args)
-                .then((action: any) => this.dispatchAction(action));
+            accumulatedValue[dispatchFnName] = (...args: Array<any>) => {
+              if (ActionClass.isNamespaced()) {
+                // $FlowFixMe
+                this.diContainer
+                  .create(ActionClass, {}, this.stateNamespace, ...firstArgs, ...args)
+                  .then((action: any) => this.dispatchAction(action));
+              } else {
+                // $FlowFixMe
+                this.diContainer
+                  .create(ActionClass, {}, ...firstArgs, ...args)
+                  .then((action: any) => this.dispatchAction(action));
+              }
+            };
           } else {
             throw new Error('diContainer argument is missing');
           }
