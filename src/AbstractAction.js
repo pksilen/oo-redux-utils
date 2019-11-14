@@ -44,12 +44,16 @@ export default class AbstractAction<StateType> {
     }
     if (this.dispatchAction_) {
       this.dispatchAction_(action);
+    } else {
+      throw new Error('dispatchAction must be given as constructor parameter');
     }
   }
 
   dispatchAsyncAction(action: AbstractAction<any>) {
     if (this.dispatchAction_) {
       this.dispatchAction_(action);
+    } else {
+      throw new Error('dispatchAction must be given as constructor parameter');
     }
   }
 
@@ -58,7 +62,7 @@ export default class AbstractAction<StateType> {
     actionClass: Class<AbstractAction<any>>,
     ...args: Array<any>
   ) {
-    diContainer.create(actionClass, {}, args).then((action: any) => this.dispatchAction(action));
+    diContainer.create(actionClass, {}, args).then((action: any) => this.dispatchAsyncAction(action));
   }
 
   dispatchActions(actions: Array<Class<AbstractAction<any>> | AbstractAction<any>>) {

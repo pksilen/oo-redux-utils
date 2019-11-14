@@ -80,15 +80,19 @@ describe('AbstractAction', () => {
       } catch (error) {}
     });
 
-    it('should do nothing if action dispatcher is not given as constructor parameter', () => {
+    it('should throw error if action dispatcher is not given as constructor parameter', () => {
       // GIVEN
       const dispatchingAction = new DispatchingAction();
       const toDispatchAction = new ModifyAgeAction(30);
 
-      // WHEN
-      dispatchingAction.dispatchAction(toDispatchAction);
-
-      // THEN DO NOTHING
+      try {
+        // WHEN
+        dispatchingAction.dispatchAction(toDispatchAction);
+        fail();
+      } catch (error) {
+        // THEN
+        expect(error.message).toBe('dispatchAction must be given as constructor parameter');
+      }
     });
   });
 
@@ -105,6 +109,21 @@ describe('AbstractAction', () => {
       // THEN
       expect(dispatchAction).toHaveBeenCalledTimes(1);
       expect(dispatchAction).toHaveBeenCalledWith(toDispatchAction);
+    });
+
+    it('should throw error if action dispatcher is not given as constructor parameter', () => {
+      // GIVEN
+      const dispatchingAction = new DispatchingAction();
+      const toDispatchAction = new ModifyAgeAction(30);
+
+      try {
+        // WHEN
+        dispatchingAction.dispatchAsyncAction(toDispatchAction);
+        fail();
+      } catch (error) {
+        // THEN
+        expect(error.message).toBe('dispatchAction must be given as constructor parameter');
+      }
     });
   });
 
