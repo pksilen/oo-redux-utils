@@ -14,7 +14,8 @@ function createStateReducer<StateType>(
   }
 
   return function(currentState: StateType = initialState, action: ActionObject): StateType {
-    return action.type instanceof actionBaseClass && action.type.getStateNamespace() === stateNamespace
+    return action.type instanceof actionBaseClass &&
+      action.type.getStateNamespace().startsWith(stateNamespace)
       ? action.type.performActionAndReturnNewState(currentState)
       : currentState;
   };
