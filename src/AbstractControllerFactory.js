@@ -20,7 +20,7 @@ export default class AbstractControllerFactory {
   ) {
     this.dispatchAction = DispatchUtils.createActionDispatcher(dispatch);
     this.diContainer = diContainer;
-    this.stateNamespace = stateNamespace;
+    this.stateNamespace = stateNamespace.split('$')[0];
   }
 
   dispatchActionWithDi(actionClass: Class<AbstractAction<any>>, ...args: Array<any>) {
