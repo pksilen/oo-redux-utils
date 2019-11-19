@@ -12,11 +12,13 @@ describe('AbstractController', () => {
       createActionDispatcherMock.mockReturnValueOnce(dispatchActionMock);
 
       // WHEN
-      const controller = new AbstractController(dispatchMock, 'test');
+      const controller = new AbstractController(dispatchMock);
+      expect(() => {
+        controller.getComponentPropNameToDispatchFnMap();
+      }).toThrowError();
 
       // THE
       expect(controller.dispatchAction).toBe(dispatchActionMock);
-      expect(controller.stateNamespace).toBe('test');
     });
   });
 });

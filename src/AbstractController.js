@@ -7,13 +7,14 @@ import type { DispatchAction } from './DispatchUtils';
 export default class AbstractController {
   dispatchAction: DispatchAction;
 
-  stateNamespace: string;
-
   constructor(
-    dispatch: Dispatch,
-    stateNamespace: string = ''
+    dispatch: Dispatch
   ) {
     this.dispatchAction = DispatchUtils.createActionDispatcher(dispatch);
-    this.stateNamespace = stateNamespace;
+  }
+
+  // noinspection JSMethodCanBeStatic
+  getComponentPropNameToDispatchFnMap(): { [string]: (...args: Array<any>) => void } {
+    throw new Error ('Abstract method error');
   }
 }
