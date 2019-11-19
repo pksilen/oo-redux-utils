@@ -13,9 +13,6 @@ describe('AbstractController', () => {
 
       // WHEN
       const controller = new AbstractControllerFactory(dispatchMock);
-      expect(() => {
-        controller.createController();
-      }).toThrowError();
 
       // THE
       expect(controller.dispatchAction).toBe(dispatchActionMock);

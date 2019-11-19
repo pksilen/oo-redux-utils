@@ -12,9 +12,4 @@ export default class AbstractControllerFactory {
   ) {
     this.dispatchAction = DispatchUtils.createActionDispatcher(dispatch);
   }
-
-  // noinspection JSMethodCanBeStatic
-  createController(): { [string]: (...args: Array<any>) => void } {
-    throw new Error ('Abstract method error');
-  }
 }
