@@ -1,4 +1,4 @@
-import AbstractControllerFactory from '../src/AbstractControllerFactory';
+import ControllerFactory from '../src/ControllerFactory';
 import DispatchUtils from '../src/DispatchUtils';
 
 describe('AbstractController', () => {
@@ -12,7 +12,7 @@ describe('AbstractController', () => {
       createActionDispatcherMock.mockReturnValueOnce(dispatchActionMock);
 
       // WHEN
-      const controller = new AbstractControllerFactory(dispatchMock);
+      const controller = new ControllerFactory(dispatchMock);
 
       // THE
       expect(controller.dispatchAction).toBe(dispatchActionMock);

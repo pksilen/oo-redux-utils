@@ -4,7 +4,7 @@ import type { Dispatch } from './DispatchWrapper';
 import DispatchUtils from './DispatchUtils';
 import type { DispatchAction } from './DispatchUtils';
 
-export default class AbstractControllerFactory {
+export default class ControllerFactory {
   dispatchAction: DispatchAction;
 
   constructor(
