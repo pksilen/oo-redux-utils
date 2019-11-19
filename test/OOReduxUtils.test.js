@@ -80,7 +80,7 @@ describe('createStateReducer', () => {
     // GIVEN
     class TestAction extends AbstractAction {}
     const reduceState = OOReduxUtils.createStateReducer(initialState, TestAction);
-    const abstractAction = { type: new TestAction() };
+    const abstractAction = { type: new TestAction('') };
 
     // THEN
     expect(() => {

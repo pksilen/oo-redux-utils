@@ -141,7 +141,7 @@ describe('AbstractAction', () => {
       const dispatchingAction = new DispatchingAction(dispatchAction);
 
       // WHEN
-      dispatchingAction.dispatchActionWithDi(diContainer, ModifyAgeDiAction,  30);
+      dispatchingAction.dispatchActionWithDi(diContainer, ModifyAgeDiAction, 30);
 
       // THEN
       return promise.then(() => {
@@ -157,16 +157,14 @@ describe('AbstractAction', () => {
       const dispatchingAction = new DispatchingAction(dispatchAction);
       const toDispatchAction1 = new ModifyAgeAction(30);
       const toDispatchAction2 = new ModifyAgeAction(35);
-      const toDispatchActionClass = ModifyAgeAction;
 
       // WHEN
-      dispatchingAction.dispatchActions([toDispatchAction1, toDispatchAction2, toDispatchActionClass]);
+      dispatchingAction.dispatchActions([toDispatchAction1, toDispatchAction2]);
 
       // THEN
-      expect(dispatchAction).toHaveBeenCalledTimes(3);
+      expect(dispatchAction).toHaveBeenCalledTimes(2);
       expect(dispatchAction).toHaveBeenNthCalledWith(1, toDispatchAction1);
       expect(dispatchAction).toHaveBeenNthCalledWith(2, toDispatchAction2);
-      expect(dispatchAction).toHaveBeenNthCalledWith(3, new toDispatchActionClass());
     });
   });
 
@@ -180,7 +178,7 @@ describe('AbstractAction', () => {
       };
 
       const action = new ModifyAgeAction(30);
-      const action2 =  new ModifyAgeAction(32);
+      const action2 = new ModifyAgeAction(32);
       const action3 = new ModifyAgeAction(34);
       const action4 = new ModifyAgeAction(36);
 
@@ -199,10 +197,7 @@ describe('AbstractAction', () => {
         [ModifyAgeDiAction, [30]],
         [ModifyAgeDiAction, 30],
         ModifyAgeDiAction,
-        ModifyAgeAction,
-        action3,
-        [ModifyAgeAction, 40],
-        [ModifyAgeAction, [50]]
+        action3
       ]);
 
       // THEN
@@ -211,9 +206,6 @@ describe('AbstractAction', () => {
         expect(dispatchAction).toHaveBeenCalledWith(action2);
         expect(dispatchAction).toHaveBeenCalledWith(action3);
         expect(dispatchAction).toHaveBeenCalledWith(action4);
-        expect(dispatchAction).toHaveBeenCalledWith(new ModifyAgeAction());
-        expect(dispatchAction).toHaveBeenCalledWith(new ModifyAgeAction(40));
-        expect(dispatchAction).toHaveBeenCalledWith(new ModifyAgeAction(50));
       });
     });
   });
