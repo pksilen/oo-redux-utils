@@ -4,7 +4,7 @@ import type { Dispatch } from './DispatchWrapper';
 import DispatchUtils from './DispatchUtils';
 import type { DispatchAction } from './DispatchUtils';
 
-export default class AbstractController {
+export default class AbstractControllerFactory {
   dispatchAction: DispatchAction;
 
   constructor(
@@ -14,7 +14,7 @@ export default class AbstractController {
   }
 
   // noinspection JSMethodCanBeStatic
-  getComponentPropNameToDispatchFnMap(): { [string]: (...args: Array<any>) => void } {
+  createController(): { [string]: (...args: Array<any>) => void } {
     throw new Error ('Abstract method error');
   }
 }

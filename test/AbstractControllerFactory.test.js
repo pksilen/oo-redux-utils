@@ -1,4 +1,4 @@
-import AbstractController from '../src/AbstractController';
+import AbstractControllerFactory from '../src/AbstractControllerFactory';
 import DispatchUtils from '../src/DispatchUtils';
 
 describe('AbstractController', () => {
@@ -12,9 +12,9 @@ describe('AbstractController', () => {
       createActionDispatcherMock.mockReturnValueOnce(dispatchActionMock);
 
       // WHEN
-      const controller = new AbstractController(dispatchMock);
+      const controller = new AbstractControllerFactory(dispatchMock);
       expect(() => {
-        controller.getComponentPropNameToDispatchFnMap();
+        controller.createController();
       }).toThrowError();
 
       // THE
