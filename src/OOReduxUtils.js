@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import AbstractAction from './AbstractAction';
-import type { ActionObject } from './DispatchWrapper';
+import type { ActionObject } from './Dispatch';
 
 function createStateReducer<StateType>(
   initialState: StateType,

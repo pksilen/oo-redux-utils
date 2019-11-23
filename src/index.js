@@ -5,5 +5,4 @@ export { default as AbstractAction } from './AbstractAction';
 export { default as DispatchUtils } from './DispatchUtils';
 export { default as ControllerFactory } from './ControllerFactory';
 export type { DispatchAction, DispatchActionWrapper } from './DispatchUtils';
-export type { Dispatch, DispatchWrapper } from './DispatchWrapper';
-export type { Controller } from './Controller';
+export type { Dispatch } from './Dispatch';

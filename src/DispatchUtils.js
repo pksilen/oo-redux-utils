@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import AbstractAction from './AbstractAction';
-import type { Dispatch } from './DispatchWrapper';
+import type { Dispatch } from './Dispatch';
 
 export type DispatchAction = (AbstractAction<any>) => void;
 export type DispatchActionWrapper = {

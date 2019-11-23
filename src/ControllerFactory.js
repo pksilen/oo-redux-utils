@@ -1,6 +1,6 @@
 // @flow
 
-import type { Dispatch } from './DispatchWrapper';
+import type { Dispatch } from './Dispatch';
 import DispatchUtils from './DispatchUtils';
 import type { DispatchAction } from './DispatchUtils';
 
