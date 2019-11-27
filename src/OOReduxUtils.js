@@ -49,7 +49,7 @@ export default class OOReduxUtils {
   }
 
   // noinspection JSUnusedGlobalSymbols
-  static createNamespacedStateReducer<StateType, StateNamespaceType: string>(
+  static createNamespacedStateReducer<StateType, StateNamespaceType: string = ''>(
     initialState: StateType,
     actionBaseClass: Class<AbstractAction<any, any>>,
     stateNamespace: StateNamespaceType,
