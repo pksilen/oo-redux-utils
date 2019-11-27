@@ -19,7 +19,7 @@ export default class AbstractAction<StateType, StateNamespaceType: string = ''> 
     throw new Error('Abstract method called');
   }
 
-  performAction(action: AbstractAction<StateType>, currentState: StateType): StateType {
+  performAction(action: AbstractAction<StateType, StateNamespaceType>, currentState: StateType): StateType {
     if (action.getBaseActionClass() === this.getBaseActionClass()) {
       return action.performActionAndReturnNewState(currentState);
     } else {
@@ -27,7 +27,7 @@ export default class AbstractAction<StateType, StateNamespaceType: string = ''> 
     }
   }
 
-  dispatchAction(action: AbstractAction<any>) {
+  dispatchAction(action: AbstractAction<any, any>) {
     if (
       action.getBaseActionClass() === this.getBaseActionClass() &&
       action.getStateNamespace() === this.stateNamespace
@@ -41,7 +41,7 @@ export default class AbstractAction<StateType, StateNamespaceType: string = ''> 
     }
   }
 
-  dispatchAsyncAction(action: AbstractAction<any>) {
+  dispatchAsyncAction(action: AbstractAction<any, any>) {
     if (this.dispatchAction_) {
       this.dispatchAction_(action);
     } else {
@@ -51,22 +51,22 @@ export default class AbstractAction<StateType, StateNamespaceType: string = ''> 
 
   dispatchActionWithDi(
     diContainer: { create: (...args: Array<any>) => any },
-    actionClass: Class<AbstractAction<any>>,
+    actionClass: Class<AbstractAction<any, any>>,
     ...args: Array<any>
   ) {
     diContainer.create(actionClass, {}, args).then((action: any) => this.dispatchAsyncAction(action));
   }
 
-  dispatchActions(actions: Array<AbstractAction<any>>) {
-    actions.forEach((action: AbstractAction<any>) => this.dispatchAction(action));
+  dispatchActions(actions: Array<AbstractAction<any, any>>) {
+    actions.forEach((action: AbstractAction<any, any>) => this.dispatchAction(action));
   }
 
   dispatchActionsWithDi(
     diContainer: { create: (...args: Array<any>) => any },
-    actionDefs: Array<[Class<AbstractAction<any>>, any] | Class<AbstractAction<any>> | AbstractAction<any>>
+    actionDefs: Array<[Class<AbstractAction<any,any>>, any] | Class<AbstractAction<any, any>> | AbstractAction<any, any>>
   ) {
     actionDefs.forEach(
-      (actionDef: [Class<AbstractAction<any>>, any] | Class<AbstractAction<any>> | AbstractAction<any>) => {
+      (actionDef: [Class<AbstractAction<any, any>>, any] | Class<AbstractAction<any, any>> | AbstractAction<any, any>) => {
         if (Array.isArray(actionDef)) {
           const [actionClass, args] = actionDef;
           if (Array.isArray(args)) {

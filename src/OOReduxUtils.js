@@ -4,10 +4,10 @@ import * as React from 'react';
 import AbstractAction from './AbstractAction';
 import type { ActionObject } from './Dispatch';
 
-function createStateReducer<StateType>(
+function createStateReducer<StateType, StateNamespaceType: string = ''>(
   initialState: StateType,
-  actionBaseClass: Class<AbstractAction<any>>,
-  stateNamespace: string
+  actionBaseClass: Class<AbstractAction<any, any>>,
+  stateNamespace: StateNamespaceType
 ): (StateType | void, ActionObject) => StateType {
   if (actionBaseClass === AbstractAction) {
     throw new Error('actionBaseClass must be a class extended from AbstractAction');
@@ -43,16 +43,16 @@ export default class OOReduxUtils {
   // noinspection JSUnusedGlobalSymbols
   static createStateReducer<StateType>(
     initialState: StateType,
-    actionBaseClass: Class<AbstractAction<any>>
+    actionBaseClass: Class<AbstractAction<any, any>>
   ): (StateType | void, ActionObject) => StateType {
     return createStateReducer(initialState, actionBaseClass, '');
   }
 
   // noinspection JSUnusedGlobalSymbols
-  static createNamespacedStateReducer<StateType>(
+  static createNamespacedStateReducer<StateType, StateNamespaceType: string>(
     initialState: StateType,
-    actionBaseClass: Class<AbstractAction<any>>,
-    stateNamespace: string
+    actionBaseClass: Class<AbstractAction<any, any>>,
+    stateNamespace: StateNamespaceType,
   ): (StateType | void, ActionObject) => StateType {
     return createStateReducer(initialState, actionBaseClass, stateNamespace);
   }
