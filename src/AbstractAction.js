@@ -2,14 +2,14 @@
 
 import type { DispatchAction } from './DispatchUtils';
 
-export default class AbstractAction<StateType> {
+export default class AbstractAction<StateType, StateNamespaceType: string = ''> {
   +actionClassName: string;
 
-  +stateNamespace: string;
+  +stateNamespace: StateNamespaceType;
 
   +dispatchAction_: ?DispatchAction;
 
-  constructor(stateNamespace: string, dispatchAction?: DispatchAction) {
+  constructor(stateNamespace: StateNamespaceType, dispatchAction?: DispatchAction) {
     this.stateNamespace = stateNamespace;
     this.dispatchAction_ = dispatchAction;
     this.actionClassName = this.constructor.name;
