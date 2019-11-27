@@ -15,7 +15,7 @@ export default class AbstractAction<StateType, StateNamespaceType: string = ''> 
     this.actionClassName = this.constructor.name;
   }
 
-  getBaseActionClass(): Class<AbstractAction<any>> {
+  getBaseActionClass(): Class<AbstractAction<any, any>> {
     throw new Error('Abstract method called');
   }
 
@@ -63,10 +63,17 @@ export default class AbstractAction<StateType, StateNamespaceType: string = ''> 
 
   dispatchActionsWithDi(
     diContainer: { create: (...args: Array<any>) => any },
-    actionDefs: Array<[Class<AbstractAction<any,any>>, any] | Class<AbstractAction<any, any>> | AbstractAction<any, any>>
+    actionDefs: Array<
+      [Class<AbstractAction<any, any>>, any] | Class<AbstractAction<any, any>> | AbstractAction<any, any>
+    >
   ) {
     actionDefs.forEach(
-      (actionDef: [Class<AbstractAction<any, any>>, any] | Class<AbstractAction<any, any>> | AbstractAction<any, any>) => {
+      (
+        actionDef:
+          | [Class<AbstractAction<any, any>>, any]
+          | Class<AbstractAction<any, any>>
+          | AbstractAction<any, any>
+      ) => {
         if (Array.isArray(actionDef)) {
           const [actionClass, args] = actionDef;
           if (Array.isArray(args)) {
