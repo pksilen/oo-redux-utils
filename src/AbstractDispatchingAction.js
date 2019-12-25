@@ -3,6 +3,13 @@
 import type { DispatchAction } from './DispatchUtils';
 import AbstractAction from './AbstractAction';
 
+class AsyncAction<ResultType, OwnStateType, StateNamespaceType: string> extends AbstractAction<
+  OwnStateType,
+  StateNamespaceType
+> {
+  constructor(first: StateNamespaceType | ResultType, second?: ResultType) {}
+}
+
 export default class AbstractDispatchingAction<
   OwnStateType,
   ForeignStateType,
@@ -23,8 +30,17 @@ export default class AbstractDispatchingAction<
     setTimeout(() => this.dispatchAction_(action), delayInMillis);
   }
 
-  dispatchAsyncAction<T>(actionClass: Class<AbstractAction<any, any>>, promise: Promise<T>) {
-    promise.then((arg: T) => this.dispatchAction_(new actionClass(arg)));
+  dispatchAsyncAction<ResultType, A: AsyncAction<ResultType, OwnStateType, StateNamespaceType>>(
+    actionClass: Class<A>,
+    promise: Promise<ResultType>
+  ) {
+    if (this.stateNamespace) {
+      promise.then((result: ResultType) =>
+        this.dispatchAction_(new actionClass(this.stateNamespace, result))
+      );
+    }
+
+    promise.then((result: ResultType) => this.dispatchAction_(new actionClass(result)));
   }
 
   dispatchActionWithDi(
