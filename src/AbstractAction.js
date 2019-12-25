@@ -1,96 +1,23 @@
 // @flow
 
-import type { DispatchAction } from './DispatchUtils';
-
-export default class AbstractAction<StateType, StateNamespaceType: string = ''> {
+export default class AbstractAction<OwnStateType, StateNamespaceType: string = ''> {
   +actionClassName: string;
 
   +stateNamespace: StateNamespaceType;
 
-  +dispatchAction_: ?DispatchAction;
-
-  constructor(stateNamespace: StateNamespaceType, dispatchAction?: DispatchAction) {
+  constructor(stateNamespace: StateNamespaceType) {
     this.stateNamespace = stateNamespace;
-    this.dispatchAction_ = dispatchAction;
     this.actionClassName = this.constructor.name;
   }
 
-  getBaseActionClass(): Class<AbstractAction<any, any>> {
-    throw new Error('Abstract method called');
+  performAction(
+    action: AbstractAction<OwnStateType, StateNamespaceType>,
+    currentState: OwnStateType
+  ): OwnStateType {
+    return action.performActionAndReturnNewState(currentState);
   }
 
-  performAction(action: AbstractAction<StateType, StateNamespaceType>, currentState: StateType): StateType {
-    if (action.getBaseActionClass() === this.getBaseActionClass()) {
-      return action.performActionAndReturnNewState(currentState);
-    } else {
-      throw new Error('Cannot perform actions from different base class');
-    }
-  }
-
-  dispatchAction(action: AbstractAction<any, any>) {
-    if (
-      action.getBaseActionClass() === this.getBaseActionClass() &&
-      action.getStateNamespace() === this.stateNamespace
-    ) {
-      throw new Error('Cannot dispatch actions from same base class');
-    }
-    if (this.dispatchAction_) {
-      this.dispatchAction_(action);
-    } else {
-      throw new Error('dispatchAction must be given as constructor parameter');
-    }
-  }
-
-  dispatchAsyncAction(action: AbstractAction<any, any>) {
-    if (this.dispatchAction_) {
-      this.dispatchAction_(action);
-    } else {
-      throw new Error('dispatchAction must be given as constructor parameter');
-    }
-  }
-
-  dispatchActionWithDi(
-    diContainer: { create: (...args: Array<any>) => any },
-    actionClass: Class<AbstractAction<any, any>>,
-    ...args: Array<any>
-  ) {
-    diContainer.create(actionClass, {}, args).then((action: any) => this.dispatchAsyncAction(action));
-  }
-
-  dispatchActions(actions: Array<AbstractAction<any, any>>) {
-    actions.forEach((action: AbstractAction<any, any>) => this.dispatchAction(action));
-  }
-
-  dispatchActionsWithDi(
-    diContainer: { create: (...args: Array<any>) => any },
-    actionDefs: Array<
-      [Class<AbstractAction<any, any>>, any] | Class<AbstractAction<any, any>> | AbstractAction<any, any>
-    >
-  ) {
-    actionDefs.forEach(
-      (
-        actionDef:
-          | [Class<AbstractAction<any, any>>, any]
-          | Class<AbstractAction<any, any>>
-          | AbstractAction<any, any>
-      ) => {
-        if (Array.isArray(actionDef)) {
-          const [actionClass, args] = actionDef;
-          if (Array.isArray(args)) {
-            this.dispatchActionWithDi(diContainer, actionClass, ...args);
-          } else {
-            this.dispatchActionWithDi(diContainer, actionClass, args);
-          }
-        } else if (typeof actionDef === 'function') {
-          this.dispatchActionWithDi(diContainer, actionDef);
-        } else {
-          this.dispatchAction(actionDef);
-        }
-      }
-    );
-  }
-
-  performActionAndReturnNewState(currentState: StateType): StateType {
+  performActionAndReturnNewState(currentState: OwnStateType): OwnStateType {
     throw new TypeError('Abstract method called');
   }
 

@@ -2,16 +2,16 @@
 
 import type { ActionObject } from './Dispatch';
 
-export default function<SNS: { [string]: string }, S>(
-  stateNamespaces: SNS,
-  createNamespacedStateReducer: ($Keys<SNS>) => (S | void, ActionObject) => S
+export default function<StateNamespacesType: { [string]: string }, StateType>(
+  stateNamespaces: StateNamespacesType,
+  createNamespacedStateReducer: ($Keys<StateNamespacesType>) => (StateType | void, ActionObject) => StateType
 ) {
   return Object.keys(stateNamespaces).reduce(
     (
       accumulatedReducers: {
-        [$Keys<SNS>]: (S | void, ActionObject) => S
+        [$Keys<StateNamespacesType>]: (StateType | void, ActionObject) => StateType
       },
-      stateNamespace: $Keys<SNS>
+      stateNamespace: $Keys<StateNamespacesType>
     ) => ({ ...accumulatedReducers, [stateNamespace]: createNamespacedStateReducer(stateNamespace) }),
     {}
   );

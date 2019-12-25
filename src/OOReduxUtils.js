@@ -3,18 +3,17 @@
 import * as React from 'react';
 import AbstractAction from './AbstractAction';
 import type { ActionObject } from './Dispatch';
+import AbstractDispatchingAction from './AbstractDispatchingAction';
 
-function createStateReducer<StateType, StateNamespaceType: string = ''>(
+function createStateReducer<StateType, StateNamespaceType: string>(
   initialState: StateType,
-  actionBaseClass: Class<AbstractAction<any, any>>,
+  actionBaseClasses: [Class<AbstractAction<any, any>>, ?Class<AbstractDispatchingAction<any, any>>],
   stateNamespace: StateNamespaceType
 ): (StateType | void, ActionObject) => StateType {
-  if (actionBaseClass === AbstractAction) {
-    throw new Error('actionBaseClass must be a class extended from AbstractAction');
-  }
-
   return function(currentState: StateType = initialState, action: ActionObject): StateType {
-    return action.type instanceof actionBaseClass && action.type.getStateNamespace() === stateNamespace
+    return (action.type instanceof actionBaseClasses[0] ||
+      (actionBaseClasses[1] && action.type instanceof actionBaseClasses[1])) &&
+      action.type.getStateNamespace() === stateNamespace
       ? action.type.performActionAndReturnNewState(currentState)
       : currentState;
   };
@@ -43,17 +42,17 @@ export default class OOReduxUtils {
   // noinspection JSUnusedGlobalSymbols
   static createStateReducer<StateType>(
     initialState: StateType,
-    actionBaseClass: Class<AbstractAction<any, any>>
+    actionBaseClasses: [Class<AbstractAction<any, any>>, ?Class<AbstractDispatchingAction<any, any>>]
   ): (StateType | void, ActionObject) => StateType {
-    return createStateReducer(initialState, actionBaseClass, '');
+    return createStateReducer(initialState, actionBaseClasses, '');
   }
 
   // noinspection JSUnusedGlobalSymbols
-  static createNamespacedStateReducer<StateType, StateNamespaceType: string = ''>(
+  static createNamespacedStateReducer<StateType, StateNamespaceType: string>(
     initialState: StateType,
-    actionBaseClass: Class<AbstractAction<any, any>>,
-    stateNamespace: StateNamespaceType,
+    actionBaseClasses: [Class<AbstractAction<any, any>>, ?Class<AbstractDispatchingAction<any, any>>],
+    stateNamespace: StateNamespaceType
   ): (StateType | void, ActionObject) => StateType {
-    return createStateReducer(initialState, actionBaseClass, stateNamespace);
+    return createStateReducer(initialState, actionBaseClasses, stateNamespace);
   }
 }
