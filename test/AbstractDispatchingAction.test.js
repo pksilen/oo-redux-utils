@@ -46,16 +46,14 @@ describe('AbstractDispatchingAction', () => {
       // GIVEN
       const dispatchAction = jest.fn();
       const dispatchingAction = new TestDispatchingAction(dispatchAction);
-      const testAction = new TestAction();
       const promise = Promise.resolve(1);
 
       // WHEN
-      dispatchingAction.dispatchAsyncAction(testAction, promise);
+      dispatchingAction.dispatchAsyncAction(TestAction, promise);
 
       // THEN
       promise.then(() => {
         expect(dispatchAction).toHaveBeenCalledTimes(1);
-        expect(dispatchAction).toHaveBeenCalledWith(testAction);
       });
     });
   });

@@ -23,8 +23,8 @@ export default class AbstractDispatchingAction<
     setTimeout(() => this.dispatchAction_(action), delayInMillis);
   }
 
-  dispatchAsyncAction(action: AbstractAction<any, any>, promise: Promise<any>) {
-    promise.then(this.dispatchAction_(action));
+  dispatchAsyncAction<T>(actionClass: Class<AbstractAction<any, any>>, promise: Promise<T>) {
+    promise.then((arg: T) => this.dispatchAction_(new actionClass(arg)));
   }
 
   dispatchActionWithDi(
