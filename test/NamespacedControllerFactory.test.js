@@ -1,4 +1,4 @@
-import ControllerFactory from '../src/ControllerFactory';
+import NamespacedControllerFactory from '../src/NamespacedControllerFactory';
 import DispatchUtils from '../src/DispatchUtils';
 
 describe('ControllerFactory', () => {
@@ -12,7 +12,7 @@ describe('ControllerFactory', () => {
       createActionDispatcherMock.mockReturnValueOnce(dispatchActionMock);
 
       // WHEN
-      const controller = new ControllerFactory(dispatchMock, '');
+      const controller = new NamespacedControllerFactory(dispatchMock, '');
 
       // THEN
       expect(controller.dispatchAction).toBe(dispatchActionMock);

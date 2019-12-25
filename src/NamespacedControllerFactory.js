@@ -4,10 +4,16 @@ import type { Dispatch } from './Dispatch';
 import DispatchUtils from './DispatchUtils';
 import type { DispatchAction } from './DispatchUtils';
 
-export default class ControllerFactory {
+export default class NamespacedControllerFactory<StateNamespaceType: string> {
   dispatchAction: DispatchAction;
 
-  constructor(dispatch: Dispatch) {
+  stateNamespace: StateNamespaceType;
+
+  constructor(
+    dispatch: Dispatch,
+    stateNamespace: StateNamespaceType
+  ) {
     this.dispatchAction = DispatchUtils.createActionDispatcher(dispatch);
+    this.stateNamespace = stateNamespace;
   }
 }
