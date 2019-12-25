@@ -30,8 +30,8 @@ export default class AbstractDispatchingAction<
     setTimeout(() => this.dispatchAction_(action), delayInMillis);
   }
 
-  dispatchAsyncAction<ResultType, A: AsyncAction<ResultType, OwnStateType, StateNamespaceType>>(
-    actionClass: Class<A>,
+  dispatchAsyncAction<ResultType>(
+    actionClass: Class<AsyncAction<ResultType, OwnStateType, StateNamespaceType>>,
     promise: Promise<ResultType>
   ) {
     if (this.stateNamespace) {
