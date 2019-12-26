@@ -30,6 +30,10 @@ export default class AbstractDispatchingAction<
     return setTimeout(() => this.dispatchAction_(action), delayInMillis);
   }
 
+  dispatchIntervalAction(action: AbstractAction<any, any>, intervalInMillis: number): IntervalID {
+    return setInterval(() => this.dispatchAction_(action), intervalInMillis);
+  }
+
   dispatchAsyncAction<ResultType>(
     actionClass: Class<AsyncAction<ResultType, OwnStateType, StateNamespaceType>>,
     promise: Promise<ResultType>
@@ -52,7 +56,7 @@ export default class AbstractDispatchingAction<
       .create(actionClass, {
         stateNamespace: this.stateNamespace,
         dispatchAction: this.dispatchAction_,
-        ...otherArgs,
+        ...otherArgs
       })
       .then((action: any) => this.dispatchAction_(action));
   }
