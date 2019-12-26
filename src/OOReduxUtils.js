@@ -7,7 +7,7 @@ import AbstractDispatchingAction from './AbstractDispatchingAction';
 
 function createStateReducer<StateType, StateNamespaceType: string>(
   initialState: StateType,
-  actionBaseClasses: [Class<AbstractAction<any, any>>, ?Class<AbstractDispatchingAction<any, any>>],
+  actionBaseClasses: [Class<AbstractAction<any, any>>, ?Class<AbstractDispatchingAction<any, any, any>>],
   stateNamespace: StateNamespaceType
 ): (StateType | void, ActionObject) => StateType {
   return function(currentState: StateType = initialState, action: ActionObject): StateType {
@@ -42,7 +42,7 @@ export default class OOReduxUtils {
   // noinspection JSUnusedGlobalSymbols
   static createStateReducer<StateType>(
     initialState: StateType,
-    actionBaseClasses: [Class<AbstractAction<any, any>>, ?Class<AbstractDispatchingAction<any, any>>]
+    actionBaseClasses: [Class<AbstractAction<any, any>>, ?Class<AbstractDispatchingAction<any, any, any>>]
   ): (StateType | void, ActionObject) => StateType {
     return createStateReducer(initialState, actionBaseClasses, '');
   }
@@ -50,7 +50,7 @@ export default class OOReduxUtils {
   // noinspection JSUnusedGlobalSymbols
   static createNamespacedStateReducer<StateType, StateNamespaceType: string>(
     initialState: StateType,
-    actionBaseClasses: [Class<AbstractAction<any, any>>, ?Class<AbstractDispatchingAction<any, any>>],
+    actionBaseClasses: [Class<AbstractAction<any, any>>, ?Class<AbstractDispatchingAction<any, any, any>>],
     stateNamespace: StateNamespaceType
   ): (StateType | void, ActionObject) => StateType {
     return createStateReducer(initialState, actionBaseClasses, stateNamespace);
