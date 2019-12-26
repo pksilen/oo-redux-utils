@@ -3,11 +3,8 @@
 import type { DispatchAction } from './DispatchUtils';
 import AbstractAction from './AbstractAction';
 
-class AsyncAction<ResultType, OwnStateType, StateNamespaceType: string> extends AbstractAction<
-  OwnStateType,
-  StateNamespaceType
-> {
-  constructor(first: StateNamespaceType | ResultType, second?: ResultType) {}
+class AsyncAction<ResultType> extends AbstractAction<any, any>{
+  constructor(first: ResultType) {}
 }
 
 export default class AbstractDispatchingAction<
@@ -35,15 +32,9 @@ export default class AbstractDispatchingAction<
   }
 
   dispatchAsyncAction<ResultType>(
-    actionClass: Class<AsyncAction<ResultType, OwnStateType, StateNamespaceType>>,
+    actionClass: Class<AsyncAction<ResultType>>,
     promise: Promise<ResultType>
   ) {
-    if (this.stateNamespace) {
-      promise.then((result: ResultType) =>
-        this.dispatchAction_(new actionClass(this.stateNamespace, result))
-      );
-    }
-
     promise.then((result: ResultType) => this.dispatchAction_(new actionClass(result)));
   }
 
