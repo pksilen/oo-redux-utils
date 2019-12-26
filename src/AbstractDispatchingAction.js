@@ -50,9 +50,9 @@ export default class AbstractDispatchingAction<
   ) {
     diContainer
       .create(actionClass, {
-        ...otherArgs,
         stateNamespace: this.stateNamespace,
-        dispatchAction: this.dispatchAction_
+        dispatchAction: this.dispatchAction_,
+        ...otherArgs,
       })
       .then((action: any) => this.dispatchAction_(action));
   }
