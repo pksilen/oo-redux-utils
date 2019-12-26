@@ -27,14 +27,14 @@ export default class AbstractDispatchingAction<
     return setInterval(() => this.dispatchAction_(action), intervalInMillis);
   }
 
-  dispatchAsyncAction<ResultType>(actionClass: Class<any>, promise: Promise<ResultType>) {
+  dispatchAsyncAction<ResultType>(actionClass: Class<any>, promise: Promise<ResultType>, ...args: Array<any>) {
     if (this.stateNamespace) {
       promise.then((result: ResultType) =>
-        this.dispatchAction_(new actionClass(this.stateNamespace, result))
+        this.dispatchAction_(new actionClass(this.stateNamespace, result, args))
       );
     }
 
-    promise.then((result: ResultType) => this.dispatchAction_(new actionClass(result)));
+    promise.then((result: ResultType) => this.dispatchAction_(new actionClass(result, args)));
   }
 
   dispatchActionWithDi(
