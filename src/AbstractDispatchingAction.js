@@ -3,10 +3,6 @@
 import type { DispatchAction } from './DispatchUtils';
 import AbstractAction from './AbstractAction';
 
-class AsyncAction<ResultType> extends AbstractAction<any, any>{
-  constructor(first: ResultType) {}
-}
-
 export default class AbstractDispatchingAction<
   OwnStateType,
   ForeignStateType,
@@ -31,10 +27,13 @@ export default class AbstractDispatchingAction<
     return setInterval(() => this.dispatchAction_(action), intervalInMillis);
   }
 
-  dispatchAsyncAction<ResultType>(
-    actionClass: Class<AsyncAction<ResultType>>,
-    promise: Promise<ResultType>
-  ) {
+  dispatchAsyncAction<ResultType>(actionClass: Class<any>, promise: Promise<ResultType>) {
+    if (this.stateNamespace) {
+      promise.then((result: ResultType) =>
+        this.dispatchAction_(new actionClass(this.stateNamespace, result))
+      );
+    }
+
     promise.then((result: ResultType) => this.dispatchAction_(new actionClass(result)));
   }
 
