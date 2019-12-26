@@ -26,8 +26,8 @@ export default class AbstractDispatchingAction<
     this.dispatchAction_(action);
   }
 
-  dispatchDelayedAction(action: AbstractAction<any, any>, delayInMillis: number) {
-    setTimeout(() => this.dispatchAction_(action), delayInMillis);
+  dispatchDelayedAction(action: AbstractAction<any, any>, delayInMillis: number): TimeoutID {
+    return setTimeout(() => this.dispatchAction_(action), delayInMillis);
   }
 
   dispatchAsyncAction<ResultType>(
