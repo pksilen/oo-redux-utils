@@ -30,11 +30,11 @@ export default class AbstractDispatchingAction<
   dispatchAsyncAction<ResultType>(actionClass: Class<any>, promise: Promise<ResultType>, ...args: Array<any>) {
     if (this.stateNamespace) {
       promise.then((result: ResultType) =>
-        this.dispatchAction_(new actionClass(this.stateNamespace, result, args))
+        this.dispatchAction_(new actionClass(this.stateNamespace, result, ...args))
       );
     }
 
-    promise.then((result: ResultType) => this.dispatchAction_(new actionClass(result, args)));
+    promise.then((result: ResultType) => this.dispatchAction_(new actionClass(result, ...args)));
   }
 
   dispatchActionWithDi(
