@@ -4,10 +4,9 @@ import type { DispatchAction } from './DispatchUtils';
 import AbstractAction from './AbstractAction';
 
 export default class AbstractDispatchingAction<
-  OwnStateType,
-  ForeignStateType,
+  StateType,
   StateNamespaceType: string = ''
-> extends AbstractAction<OwnStateType, StateNamespaceType> {
+> extends AbstractAction<StateType, StateNamespaceType> {
   +dispatchAction_: DispatchAction;
 
   constructor(stateNamespace: StateNamespaceType, dispatchAction: DispatchAction) {
@@ -15,7 +14,7 @@ export default class AbstractDispatchingAction<
     this.dispatchAction_ = dispatchAction;
   }
 
-  dispatchAction(action: AbstractAction<ForeignStateType, any>) {
+  dispatchAction(action: AbstractAction<StateType, any>) {
     this.dispatchAction_(action);
   }
 }
