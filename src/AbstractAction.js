@@ -1,6 +1,6 @@
 // @flow
 
-export default class AbstractAction<OwnStateType, StateNamespaceType: string = ''> {
+export default class AbstractAction<StateType, StateNamespaceType: string = ''> {
   +actionClassName: string;
 
   +stateNamespace: StateNamespaceType;
@@ -11,13 +11,13 @@ export default class AbstractAction<OwnStateType, StateNamespaceType: string = '
   }
 
   performAction(
-    action: AbstractAction<OwnStateType, StateNamespaceType>,
-    currentState: OwnStateType
-  ): OwnStateType {
+    action: AbstractAction<StateType, StateNamespaceType>,
+    currentState: StateType
+  ): StateType {
     return action.performActionAndReturnNewState(currentState);
   }
 
-  performActionAndReturnNewState(currentState: OwnStateType): OwnStateType {
+  performActionAndReturnNewState(currentState: StateType): StateType {
     throw new TypeError('Abstract method called');
   }
 
