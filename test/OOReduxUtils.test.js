@@ -3,6 +3,7 @@ import OOReduxUtils from '../src/OOReduxUtils';
 import ModifyAgeAction from './ModifyAgeAction';
 import AbstractAction from '../src/AbstractAction';
 import AnotherAction from './AnotherAction';
+import TestDispatchingAction from './TestDispatchingAction';
 
 describe('OOReduxUtils', () => {
   describe('mergeOwnAndForeignState', () => {
@@ -44,7 +45,7 @@ describe('OOReduxUtils', () => {
       age: 25
     };
 
-    test('that calling created default namespaced state reducer reduces state with given action', () => {
+    test('that calling the created state reducer reduces state with given action', () => {
       // GIVEN
       const reduceState = OOReduxUtils.createStateReducer(initialState, [ModifyAgeAction]);
       const currentState = {
@@ -59,6 +60,28 @@ describe('OOReduxUtils', () => {
       // THEN
       expect(newState.name).toBe('test2');
       expect(newState.age).toBe(30);
+    });
+
+    test('that calling the created state reducer reduces state with given dispatching action', () => {
+      // GIVEN
+      const reduceState = OOReduxUtils.createStateReducer(initialState, [
+        ModifyAgeAction,
+        TestDispatchingAction
+      ]);
+
+      const currentState = {
+        name: 'test2',
+        age: 25
+      };
+
+      const modifyAgeAction = { type: new TestDispatchingAction() };
+
+      // WHEN
+      const newState = reduceState(currentState, modifyAgeAction);
+
+      // THEN
+      expect(newState.name).toBe('test2');
+      expect(newState.age).toBe(35);
     });
 
     test('that calling the created state reducer without current state should use initial state', () => {
